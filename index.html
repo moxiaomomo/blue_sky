@@ -33,11 +33,13 @@ title: 我的Blog
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
+      <section class="inner">
       <ul>
       　　{% for post in site.posts %}
       　　　　<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
       　　{% endfor %}
       </ul>
+      </session>
 
       <section class="inner">
       <h4>About me</h4>
