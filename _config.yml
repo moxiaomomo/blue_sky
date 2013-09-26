@@ -86,7 +86,7 @@ JB :
   comments :
     provider : duoshuo
     duoshuo :
-      short_name : xiaomo
+      short_name : moxiaomomo
 
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
