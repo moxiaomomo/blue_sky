@@ -46,6 +46,16 @@
       </div>
     </div>
 
+    <section>
+        <h3>Latest Comments</h3>
+        <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="0" data-show-time="0" data-show-title="0" data-show-admin="0" data-excerpt-length="18"></ul>
+    </section>
+
+    <section style="width:250px;">
+        <h3>Recently Visitors</h3>
+        <ul class="ds-recent-visitors" data-num-items="4" data-avatar-size="45" style="margin-top:10px;"></ul>
+    </section>
+
     <div class="container-narrow">
 
       <div class="content">
@@ -59,24 +69,21 @@
         </p>
       </footer>
 
-    </div>
-
-    <!--多说js加载开始，一个页面只需要加载一次 -->
-    <!-- Duoshuo Comment BEGIN -->
-    <div class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
-    <script type="text/javascript">
+      <!--多说js加载开始，一个页面只需要加载一次 -->
+      <div class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
+      <script type="text/javascript">
         var duoshuoQuery = {short_name:"moxiaomomo"};
             (function() {
                 var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = 'http://static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		|| document.getElementsByTagName('body')[0]).appendChild(ds);
-	    })();
-    </script>
-    <!-- Duoshuo Comment END -->
-    <!--多说js加载结束，一个页面只需要加载一次 -->
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = 'http://static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+      </script>
+      <!--多说js加载结束，一个页面只需要加载一次 -->
+    </div>
 
     {% include JB/analytics %}
   </body>
