@@ -2,7 +2,6 @@
 http://moxiaomomo.github.io/blue_sky/archive.html
 http://moxiaomomo.github.io/blue_sky/pages.html
 http://moxiaomomo.github.io/blue_sky/index.html
-http://moxiaomomo.github.io/blue_sky/index.html
 http://moxiaomomo.github.io/blue_sky/categories.html
 http://moxiaomomo.github.io/blue_sky/atom.xml
 http://moxiaomomo.github.io/blue_sky/rss.xml
