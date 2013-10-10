@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{ page.title }}</title>
-    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
-    <meta name="author" content="{{ site.author.name }}">
+    <title>Categories</title>
+    
+    <meta name="author" content="mo guang">
 
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +28,8 @@
   -->
 
     <!-- atom & rss feed -->
-    <link href="{{ BASE_PATH }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
-    <link href="{{ BASE_PATH }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
 
   </head>
 
@@ -36,11 +37,65 @@
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container-narrow">
-          <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
+          <a class="brand" href="/">my dreams and my life</a>
           <ul class="nav">
-            {% assign pages_list = site.pages %}
-            {% assign group = 'navigation' %}
-            {% include JB/pages_list %}
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li class="active"><a href="/categories.html" class="active">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
           </ul>
         </div>
       </div>
@@ -55,23 +110,87 @@
 					<h6>Recent Posts</h6>
 				</a>
 			</li>
-			{% for post in site.posts offset:0 limit:7 %}
-			{% unless post.draft %}
+			
+			
 			<li>
-				<a href="/blue_sky/{{ post.url }}">{{ post.title }}</a>
+				<a href="/blue_sky//2013/09/24/terris">【python】pygame实现简单的俄罗斯方块</a>
 			</li>
-			{% endunless %}
-			{% endfor %}
+			
+			
+			
+			<li>
+				<a href="/blue_sky//2013/09/17/%5Bpython%5Dsplit-file-by-row">【python】按行切分文件</a>
+			</li>
+			
+			
+			
+			<li>
+				<a href="/blue_sky//lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a>
+			</li>
+			
+			
 		</ul>
 	</div>
         <div class="span8 mt80" id="mainContent">
 			<div class="content">
-				{{ content }}
+				
+<div class="page-header">
+  <h1>Categories </h1>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    
+
+<ul class="tag_box inline">
+  
+  
+
+
+  
+     
+    	<li><a href="/categories.html#lessons-ref">
+    		lessons <span>1</span>
+    	</a></li>
+    
+  
+
+
+</ul>
+
+
+ 
+  <h2 id="lessons-ref">lessons</h2>
+  <ul>
+      
+    
+
+
+  
+    
+      
+      	
+      	<li><a href="/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
+      	
+      
+    
+  
+
+
+
+  </ul>
+
+
+
+  </div>
+</div>
+
+
 			</div>
 			<hr>
 
 			<!--多说js加载开始，一个页面只需要加载一次 -->
-	        <div class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
+	        <div class="ds-thread" data-title="Categories - my dreams and my life"></div>
 	        <script type="text/javascript">
 				var duoshuoQuery = {short_name:"moxiaomomo"};
 				(function() {
@@ -85,7 +204,7 @@
 	        </script>
 			<!--多说js加载结束，一个页面只需要加载一次 -->
 	        <footer>
-				<p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}
+				<p>&copy; 2013 mo guang
 				 with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
 				 and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
 	        </p>
@@ -94,6 +213,7 @@
 	</div>
    </div>
 
-    {% include JB/analytics %}
+    
   </body>
 </html>
+

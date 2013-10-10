@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>【python】按行切分文件</title>
+    
+    <meta name="author" content="mo guang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/blue_sky/assets/themes/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/blue_sky/assets/themes/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">my dreams and my life</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">	  
+        <div class="span3 mt60">
+	        <ul class="nav nav-list affix" id="sidebar">
+			<li class="active nav-header">
+				<a href="#">
+					<h6>Recent Posts</h6>
+				</a>
+			</li>
+			
+			
+			<li>
+				<a href="/blue_sky//2013/09/24/terris">【python】pygame实现简单的俄罗斯方块</a>
+			</li>
+			
+			
+			
+			<li>
+				<a href="/blue_sky//2013/09/17/%5Bpython%5Dsplit-file-by-row">【python】按行切分文件</a>
+			</li>
+			
+			
+			
+			<li>
+				<a href="/blue_sky//lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a>
+			</li>
+			
+			
+		</ul>
+	</div>
+        <div class="span8 mt80" id="mainContent">
+			<div class="content">
+				<h2>【python】按行切分文件</h2>
+<p>python脚本利用shell命令来实现文本的操作， 这些命令大大减少了我们的代码量。
+比如按行切分文件并返回切分后得到的文件列表，可以利用内建的split命令进行切分。为了返回得到的文件列表名，可以先将文件切分到自建的子目录中，然后通过
+os.listdir获取所有文件，再将这些文件移到上一级目录(即函数参数指定的新目录)，删除自建子目录，最后返回该文件名列表。
+代码如下，如发现问题欢迎指正:</p>
+<pre><code>
+# 创建新路径
+def make_dirs(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)   
+
+# 获取文件的行数
+def get_total_lines(file_path):
+    if not os.path.exists(file_path):
+        return 0
+    cmd = 'wc -l %s' % file_path
+    return int(os.popen(cmd).read().split()[0])
+
+# 函数split_file_by_row: 按行切分文件
+# filepath: 切分的目标文件
+# new_filepath: 生成新文件的路径
+# row_cnt: 每个文件最多包含几行
+# suffix_type: 新文件后缀类型，如两位字母或数字
+# return: 切分后的文件列表
+def split_file_by_row(filepath, new_filepath, row_cnt, suffix_type='-d'):
+    tmp_dir = "/split_file_by_row/"
+    make_dirs(new_filepath)
+    make_dirs(new_filepath+tmp_dir)
+
+    total_rows = get_total_lines(filepath)
+    file_cnt = int(math.ceil(total_rows*1.0/row_cnt))
+        command = "split -l%d -a2 %s %s %s" % (row_cnt, suffix_type, filepath, new_filepath+tmp_dir) 
+        os.system(command)
+
+        filelist = os.listdir(new_filepath+tmp_dir)
+    command = "mv %s/* %s"%(new_filepath+tmp_dir, new_filepath)
+    os.system(command)
+
+    command = "rm -r %s"%(new_filepath+tmp_dir)
+    os.system(command)
+
+    return [new_filepath+fn for fn in filelist]
+
+</code></pre>
+<p></P>
+<p>17 Sep 2013</p>
+
+
+
+			</div>
+			<hr>
+
+			<!--多说js加载开始，一个页面只需要加载一次 -->
+	        <div class="ds-thread" data-title="【python】按行切分文件 - my dreams and my life"></div>
+	        <script type="text/javascript">
+				var duoshuoQuery = {short_name:"moxiaomomo"};
+				(function() {
+					var ds = document.createElement('script');
+					ds.type = 'text/javascript';ds.async = true;
+					ds.src = 'http://static.duoshuo.com/embed.js';
+					ds.charset = 'UTF-8';
+					(document.getElementsByTagName('head')[0] 
+					|| document.getElementsByTagName('body')[0]).appendChild(ds);
+			    })();
+	        </script>
+			<!--多说js加载结束，一个页面只需要加载一次 -->
+	        <footer>
+				<p>&copy; 2013 mo guang
+				 with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+				 and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+	        </p>
+	        </footer>
+            </div>
+	</div>
+   </div>
+
+    
+  </body>
+</html>
+

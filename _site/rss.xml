@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+        <title>my dreams and my life</title>
+        <description>my dreams and my life - mo guang</description>
+        <link>http://moxiaomomo.github.io/blue_sky</link>
+        <link>http://moxiaomomo.github.io/blue_sky</link>
+        <lastBuildDate>2013-10-07T10:36:18+08:00</lastBuildDate>
+        <pubDate>2013-10-07T10:36:18+08:00</pubDate>
+        <ttl>1800</ttl>
+
+
+        <item>
+                <title>【python】pygame实现简单的俄罗斯方块</title>
+                <description>&lt;h2&gt;【python】pygame实现简单的俄罗斯方块&lt;/h2&gt;
+&lt;p&gt;shapes.py定义了方块类型, common.py定义了一些常量，及地图相关数组等&lt;/p&gt;
+&lt;p&gt;common.py&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+#!/usr/bin/env python2.7
+#-*- encoding:utf-8 -*-
+
+# 初始化地图，并为活动空间外墙壁赋值
+def init_map(max_x, max_y, wall_widith, wall_height):  
+    maps = [[0 for col in range(max_x)]for cell in range(max_y)]  
+    for y in range(max_y):  
+        for x in range(max_x):  
+            if x &lt; wall_widith or x &gt; max_x - wall_widith - 1 or y &gt; max_y - wall_height-1 or y &lt; WALL_HEIGHT:  
+                    maps[y][x] = 2 
+    return maps
+
+# 获取新方块的起始位置  
+def get_start_point(shape):
+    h = len(shape)
+    return [CENTER_X, WALL_HEIGHT-h]
+
+SCREEN_SIZE = WIDTH, HEIGHT = [760, 560]
+BACKGROUND_COLOR = (33, 124, 33)  
+BLOCK_COLOR = (123, 22, 33)  
+BLOCK_EDGE_COLOR = (200, 233, 200)
+OUTER_WALL_COLOR = (51, 51, 51) 
+ 
+WALL_WIDTH = 11 
+WALL_HEIGHT = 3  
+#地图从(0,0)坐标开始画  
+MAP_BEGIN_POINT = [0, 0]  
+#地图的最大行数和列数  
+MAX_X, MAX_Y = 38, 28 
+#方块的边长  
+RECT_SIZE = [WIDTH/MAX_X, HEIGHT/MAX_Y]  
+#屏幕中央的x坐标  
+CENTER_X = int(MAX_X / 2) - 3
+#地图的数据  
+MAP_DATA = init_map(MAX_X, MAX_Y, WALL_WIDTH, WALL_HEIGHT)  
+# 展示下一方块的区域起始位置
+NEXT_BLOCK_START_POINT = [WALL_HEIGHT, WALL_HEIGHT]
+# 展示分数的区域起始位置
+SCORE_START_POINT = [MAX_X - WALL_WIDTH + 1, WALL_HEIGHT]
+#每秒的帧数  
+FPS = 40  
+#方块的下落速度  
+SPEED = 1  
+#方块自由体积下落的时间间隔  
+FALL_PER_SECONDS = 1  
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;shapes.py&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+#!/usr/bin/env python2.7
+#-* coding:UTF-8 -*
+import random
+
+NT_SHAPES = [
+    [
+        [1,1,0],
+        [0,1,0],
+        [0,1,0]
+    ],
+    [
+        [1,1,0],
+        [0,1,1],
+        [0,0,0]
+    ],
+    [
+        [0,1,1],
+        [1,1,0],
+        [0,0,0]
+    ],
+    [
+        [1,1,1],
+        [0,1,0],
+        [0,0,0]
+    ],
+    [
+        [0,0,0,0],
+        [1,1,1,1],
+        [0,0,0,0],
+        [0,0,0,0]
+    ],
+    [
+        [0,1,1],
+        [0,1,0],
+        [0,1,0]
+    ],
+    [
+        [1,1],
+        [1,1]
+    ]
+]
+
+# 随机生成方块
+def get_shape():
+    shape = random.choice(NT_SHAPES)
+    rotate_cnt = random.randint(0,3)
+    for i in range(0,rotate_cnt):
+    	shape = rotate_shape(shape)
+    return shape
+
+# 90°旋转方块
+def rotate_shape(shape):
+    h = len(shape)
+    w = len(shape[0])
+
+    new_shape = [[0 for col in range(w)] for row in range(h)]
+    for x in range(w):
+        for y in range(h-1, -1, -1):
+            new_shape[x][y] = shape[y][h-1-x]
+
+    return new_shape
+
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h&gt;tetries_game.py&lt;/h&gt;
+&lt;pre&gt;&lt;code&gt;
+#!/usr/bin/env python2.7
+#-* coding:UTF-8 -*
+
+import pygame
+from sys import exit
+from pygame.locals import *
+import copy
+
+from shapes import *
+from common import *
+
+SCREEN = None
+SCORE = 0
+
+def init_game():
+    global SCREEN
+    pygame.init()  
+    SCREEN = pygame.display.set_mode(SCREEN_SIZE)  
+    SCREEN.fill(BACKGROUND_COLOR)  
+    pygame.key.set_repeat(200, 2)
+    pygame.display.set_caption(&quot;Cool Tetris&quot;)
+ 
+def draw(block_data, start_point, map_data, SCREEN, next_block_data=None, game_over=False):  
+    _map_data = copy.deepcopy(map_data)  
+    _map_start_point = MAP_BEGIN_POINT[:]  
+    #更新地图对应的数组数据  
+    update_map_data(block_data, start_point, _map_data, next_block_data)
+    begin_x = _map_start_point[0]   
+    for line in _map_data:  
+        for block in line:  
+            rect = pygame.Rect(_map_start_point, RECT_SIZE)  
+            if block == 1:
+                pygame.draw.rect(SCREEN, BLOCK_COLOR, rect) 
+                pygame.draw.rect(SCREEN, BLOCK_EDGE_COLOR, rect, 1)
+            if block == 2:
+                pygame.draw.rect(SCREEN, OUTER_WALL_COLOR, rect)
+            _map_start_point[0] += RECT_SIZE[0]  
+        _map_start_point[1] += RECT_SIZE[1]  
+        _map_start_point[0] = begin_x
+
+    _start_point = SCORE_START_POINT[:]
+    _rect_size = RECT_SIZE[:]
+    font = pygame.font.Font(None, 32)
+    text = font.render(&quot;Score: &quot;+str(SCORE), True, [0,0,0])
+    SCREEN.blit(text, [_start_point[0]*_rect_size[0], _start_point[1]*_rect_size[1]])
+
+    if game_over:
+        text = font.render(&quot;Game Over&quot;, True, [0,0,0])
+        SCREEN.blit(text, [_start_point[0]*_rect_size[0], (_start_point[1]+3)*_rect_size[1]]) 
+
+'''
+    更新地图数据(各个方块的值)
+'''		
+def update_map_data(block_data, start_point, map_data, next_block_data):    
+    _start_x, _start_y = start_point[0], start_point[1]   
+    for y in range(len(block_data)):  
+        for x in range(len(block_data[0])):   
+            if _start_x + x &lt;= WALL_WIDTH - 1 or _start_x + x &gt;= MAX_X - WALL_WIDTH:  
+                continue  
+            if map_data[_start_y + y][_start_x + x] == 0:  
+                map_data[_start_y + y][_start_x + x] = block_data[y][x]
+
+    # 更新下一个方块对应的地图数组值
+    if next_block_data:
+        _lt_point = NEXT_BLOCK_START_POINT[:]
+        _start_x, _start_y = _lt_point[0], _lt_point[1]
+        for y in range(4):  
+            for x in range(4):
+                map_data[_start_y + y][_start_x + x] = 2
+        for y in range(len(next_block_data)):  
+            for x in range(len(next_block_data[0])):
+                if next_block_data[y][x] == 1:
+                    map_data[_start_y + y][_start_x + x] = 1
+
+'''
+    判断方块在地图里面是否发生相撞
+'''   
+def can_move(block_data, start_point, map_data):  
+   _start_x, _start_y = start_point[0], start_point[1]  
+   for y in range(len(block_data)):  
+       for x in range(len(block_data[0])):  
+           if _start_y&gt;=WALL_HEIGHT and block_data[y][x] and map_data[_start_y + y][_start_x + x]:  
+                return False  
+   return True
+
+def is_game_over(block_data, start_point, map_data, can_move):
+    _start_x, _start_y = start_point[0], start_point[1]
+    if not can_move and _start_y &lt; WALL_HEIGHT:
+        for x in block_data[0]:
+           if x==1:
+               return True
+    return False
+ 
+'''
+    判断哪些行可以进行消除，返回可以消除的最底行的y坐标
+''' 
+def get_max_full_line(map_data):    
+    full_line_y = -1  
+    #从最底部开始向上扫描，如果发现整行都为1, 则可以消除该行  
+    for y in range(MAX_Y-WALL_HEIGHT-1, WALL_HEIGHT, -1):
+        if len([x for x in map_data[y] if x == 1 ]) == (MAX_X - WALL_WIDTH*2):  
+            full_line_y = y
+            break
+        elif y == 1:
+            break    
+    return full_line_y  
+ 
+'''
+   循环遍历满格行，数组值依次下移
+''' 
+def delete_full_lines(map_data):
+    global SCORE
+    full_line_y = get_max_full_line(map_data)
+    while full_line_y &gt;= 0:
+        SCORE += 100
+        for y in range(full_line_y, WALL_HEIGHT, -1):  
+            for x in range(WALL_WIDTH, MAX_X - WALL_WIDTH):
+                if y &gt;= 1:
+                    map_data[y][x] = map_data[y - 1][x]
+                else:
+                    for x in range(WALL_WIDTH, MAX_X - WALL_WIDTH):
+                        map_data[0][x] = 0
+    
+        full_line_y = get_max_full_line(map_data)
+ 
+def start_game():  
+    init_game()
+
+    _running = True
+    _pause = False
+    _game_over = False
+    _score = 0
+    _clock = pygame.time.Clock()  
+    _time_passed = 0  
+    _map_data = copy.deepcopy(MAP_DATA)  
+    _block_data = get_shape()
+    _next_block_data = get_shape()
+    _block_lt = get_start_point(_block_data) 
+	
+    draw(_block_data, _block_lt, _map_data, SCREEN, _next_block_data, False)  
+    pygame.display.flip()  
+
+    try:  
+        while _running:
+            if not _pause:
+                _time_passed += (_clock.tick(FPS) / 1000.0)
+                
+                if not _game_over and int(round(_time_passed))/FALL_PER_SECONDS &gt;= 1:  
+                    #向下移动一个距离，如不能移动则生成新方块，更新地图
+                    _block_lt_x = _block_lt[0]  
+                    _block_lt_y = _block_lt[1]  
+                    _block_lt_y += SPEED
+                    print _block_lt_y
+                    if can_move(_block_data,[_block_lt_x,_block_lt_y],_map_data):  
+                        _block_lt[1] = _block_lt_y  
+                    else:
+                        if is_game_over(_block_data, _block_lt, _map_data, False):
+                            _game_over = True
+                            draw(_block_data, _block_lt, _map_data, SCREEN, next_block_data=None, game_over=True)
+                            pygame.display.update()
+                        else:
+                            update_map_data(_block_data, _block_lt, _map_data, _next_block_data)  
+                            delete_full_lines(_map_data)  
+                            _block_data = _next_block_data  
+                            _next_block_data = get_shape()
+                            _block_lt = get_start_point(_block_data)
+                            
+                    _time_passed = 0
+ 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:  
+                    _running = False  
+                if event.type == pygame.KEYDOWN and not _game_over:
+                    if event.key == pygame.K_SPACE:
+                        _pause = not _pause
+                    if _pause: continue
+                    _block_lt_x = _block_lt[0]  
+                    _block_lt_y = _block_lt[1]  
+                    if event.key == pygame.K_DOWN:
+                        if can_move(_block_data, [_block_lt_x, _block_lt_y + 1], _map_data):
+                            _block_lt[1] += 1
+                    elif event.key == pygame.K_LEFT:  
+                        if can_move(_block_data, [_block_lt_x - 1, _block_lt_y], _map_data):  
+                            _block_lt[0] -= 1  
+                    elif event.key == pygame.K_RIGHT:  
+                        if can_move(_block_data, [_block_lt_x + 1, _block_lt_y], _map_data):  
+                            _block_lt[0] += 1  
+                    elif event.key == pygame.K_UP:  
+                        test_rorate = rotate_shape(_block_data)  
+                        if can_move(test_rorate, _block_lt, _map_data):  
+                            _block_data = test_rorate                    
+ 
+            SCREEN.fill(BACKGROUND_COLOR)  
+            draw(_block_data, _block_lt, _map_data, SCREEN, _next_block_data)
+            pygame.display.update()  
+    finally:
+        pygame.quit()
+            
+ 
+if __name__ == '__main__':  
+    start_game()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h&gt;运行效果如下:&lt;/h&gt;
+&lt;img src=&quot;/blue_sky/assets/img/20130926083806.png&quot; alt=&quot;俄罗斯方块&quot;&gt;&lt;/img&gt;
+
+&lt;p&gt;未完待续&lt;/p&gt;
+</description>
+                <link>http://moxiaomomo.github.io/blue_sky/2013/09/24/terris</link>
+                <guid>http://moxiaomomo.github.io/blue_sky/2013/09/24/terris</guid>
+                <pubDate>2013-09-24T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【python】按行切分文件</title>
+                <description>&lt;h2&gt;【python】按行切分文件&lt;/h2&gt;
+&lt;p&gt;python脚本利用shell命令来实现文本的操作， 这些命令大大减少了我们的代码量。
+比如按行切分文件并返回切分后得到的文件列表，可以利用内建的split命令进行切分。为了返回得到的文件列表名，可以先将文件切分到自建的子目录中，然后通过
+os.listdir获取所有文件，再将这些文件移到上一级目录(即函数参数指定的新目录)，删除自建子目录，最后返回该文件名列表。
+代码如下，如发现问题欢迎指正:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+# 创建新路径
+def make_dirs(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)   
+
+# 获取文件的行数
+def get_total_lines(file_path):
+    if not os.path.exists(file_path):
+        return 0
+    cmd = 'wc -l %s' % file_path
+    return int(os.popen(cmd).read().split()[0])
+
+# 函数split_file_by_row: 按行切分文件
+# filepath: 切分的目标文件
+# new_filepath: 生成新文件的路径
+# row_cnt: 每个文件最多包含几行
+# suffix_type: 新文件后缀类型，如两位字母或数字
+# return: 切分后的文件列表
+def split_file_by_row(filepath, new_filepath, row_cnt, suffix_type='-d'):
+    tmp_dir = &quot;/split_file_by_row/&quot;
+    make_dirs(new_filepath)
+    make_dirs(new_filepath+tmp_dir)
+
+    total_rows = get_total_lines(filepath)
+    file_cnt = int(math.ceil(total_rows*1.0/row_cnt))
+        command = &quot;split -l%d -a2 %s %s %s&quot; % (row_cnt, suffix_type, filepath, new_filepath+tmp_dir) 
+        os.system(command)
+
+        filelist = os.listdir(new_filepath+tmp_dir)
+    command = &quot;mv %s/* %s&quot;%(new_filepath+tmp_dir, new_filepath)
+    os.system(command)
+
+    command = &quot;rm -r %s&quot;%(new_filepath+tmp_dir)
+    os.system(command)
+
+    return [new_filepath+fn for fn in filelist]
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;17 Sep 2013&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.io/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row</link>
+                <guid>http://moxiaomomo.github.io/blue_sky/2013/09/17/[python]split-file-by-row</guid>
+                <pubDate>2013-09-17T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>Jekyll Introduction</title>
+                <description>&lt;p&gt;This Jekyll introduction will outline specifically  what Jekyll is and why you would want to use it.
+Directly following the intro we'll learn exactly &lt;em&gt;how&lt;/em&gt; Jekyll does what it does.&lt;/p&gt;
+
+&lt;h2&gt;Overview&lt;/h2&gt;
+
+&lt;h3&gt;What is Jekyll?&lt;/h3&gt;
+
+&lt;p&gt;Jekyll is a parsing engine bundled as a ruby gem used to build static websites from
+dynamic components such as templates, partials, liquid code, markdown, etc. Jekyll is known as &quot;a simple, blog aware, static site generator&quot;.&lt;/p&gt;
+
+&lt;h3&gt;Examples&lt;/h3&gt;
+
+&lt;p&gt;This website is created with Jekyll. &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Sites&quot;&gt;Other Jekyll websites&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3&gt;What does Jekyll Do?&lt;/h3&gt;
+
+&lt;p&gt;Jekyll is a ruby gem you install on your local system.
+Once there you can call &lt;code&gt;jekyll --server&lt;/code&gt; on a directory and provided that directory
+is setup in a way jekyll expects, it will do magic stuff like parse markdown/textile files,
+compute categories, tags, permalinks, and construct your pages from layout templates and partials.&lt;/p&gt;
+
+&lt;p&gt;Once parsed, Jekyll stores the result in a self-contained static &lt;code&gt;_site&lt;/code&gt; folder.
+The intention here is that you can serve all contents in this folder statically from a plain static web-server.&lt;/p&gt;
+
+&lt;p&gt;You can think of Jekyll as a normalish dynamic blog but rather than parsing content, templates, and tags
+on each request, Jekyll does this once &lt;em&gt;beforehand&lt;/em&gt; and caches the &lt;em&gt;entire website&lt;/em&gt; in a folder for serving statically.&lt;/p&gt;
+
+&lt;h3&gt;Jekyll is Not Blogging Software&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Jekyll is a parsing engine.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Jekyll does not come with any content nor does it have any templates or design elements.
+This is a common source of confusion when getting started.
+Jekyll does not come with anything you actually use or see on your website - you have to make it.&lt;/p&gt;
+
+&lt;h3&gt;Why Should I Care?&lt;/h3&gt;
+
+&lt;p&gt;Jekyll is very minimalistic and very efficient.
+The most important thing to realize about Jekyll is that it creates a static representation of your website requiring only a static web-server.
+Traditional dynamic blogs like Wordpress require a database and server-side code.
+Heavily trafficked dynamic blogs must employ a caching layer that ultimately performs the same job Jekyll sets out to do; serve static content.&lt;/p&gt;
+
+&lt;p&gt;Therefore if you like to keep things simple and you prefer the command-line over an admin panel UI then give Jekyll a try.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Developers like Jekyll because we can write content like we write code:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ability to write content in markdown or textile in your favorite text-editor.&lt;/li&gt;
+&lt;li&gt;Ability to write and preview your content via localhost.&lt;/li&gt;
+&lt;li&gt;No internet connection required.&lt;/li&gt;
+&lt;li&gt;Ability to publish via git.&lt;/li&gt;
+&lt;li&gt;Ability to host your blog on a static web-server.&lt;/li&gt;
+&lt;li&gt;Ability to host freely on GitHub Pages.&lt;/li&gt;
+&lt;li&gt;No database required.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h1&gt;How Jekyll Works&lt;/h1&gt;
+
+&lt;p&gt;The following is a complete but concise outline of exactly how Jekyll works.&lt;/p&gt;
+
+&lt;p&gt;Be aware that core concepts are introduced in rapid succession without code examples.
+This information is not intended to specifically teach you how to do anything, rather it
+is intended to give you the &lt;em&gt;full picture&lt;/em&gt; relative to what is going on in Jekyll-world.&lt;/p&gt;
+
+&lt;p&gt;Learning these core concepts should help you avoid common frustrations and ultimately
+help you better understand the code examples contained throughout Jekyll-Bootstrap.&lt;/p&gt;
+
+&lt;h2&gt;Initial Setup&lt;/h2&gt;
+
+&lt;p&gt;After &lt;a href=&quot;/index.html#start-now&quot;&gt;installing jekyll&lt;/a&gt; you'll need to format your website directory in a way jekyll expects.
+Jekyll-bootstrap conveniently provides the base directory format.&lt;/p&gt;
+
+&lt;h3&gt;The Jekyll Application Base Format&lt;/h3&gt;
+
+&lt;p&gt;Jekyll expects your website directory to be laid out like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.
+|-- _config.yml
+|-- _includes
+|-- _layouts
+|   |-- default.html
+|   |-- post.html
+|-- _posts
+|   |-- 2011-10-25-open-source-is-good.markdown
+|   |-- 2011-04-26-hello-world.markdown
+|-- _site
+|-- index.html
+|-- assets
+    |-- css
+        |-- style.css
+    |-- javascripts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;_config.yml&lt;/strong&gt;&lt;br/&gt;
+  Stores configuration data.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;_includes&lt;/strong&gt;&lt;br/&gt;
+  This folder is for partial views.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;_layouts&lt;/strong&gt; &lt;br/&gt;
+  This folder is for the main templates your content will be inserted into.
+  You can have different layouts for different pages or page sections.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;_posts&lt;/strong&gt;&lt;br/&gt;
+  This folder contains your dynamic content/posts.
+  the naming format is required to be &lt;code&gt;@YEAR-MONTH-DATE-title.MARKUP@&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;_site&lt;/strong&gt;&lt;br/&gt;
+  This is where the generated site will be placed once Jekyll is done transforming it.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;assets&lt;/strong&gt;&lt;br/&gt;
+  This folder is not part of the standard jekyll structure.
+  The assets folder represents &lt;em&gt;any generic&lt;/em&gt; folder you happen to create in your root directory.
+  Directories and files not properly formatted for jekyll will be left untouched for you to serve normally.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;(read more: &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Usage&quot;&gt;https://github.com/mojombo/jekyll/wiki/Usage&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h3&gt;Jekyll Configuration&lt;/h3&gt;
+
+&lt;p&gt;Jekyll supports various configuration options that are fully outlined here:
+&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Configuration&quot;&gt;https://github.com/mojombo/jekyll/wiki/Configuration&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Content in Jekyll&lt;/h2&gt;
+
+&lt;p&gt;Content in Jekyll is either a post or a page.
+These content &quot;objects&quot; get inserted into one or more templates to build the final output for its respective static-page.&lt;/p&gt;
+
+&lt;h3&gt;Posts and Pages&lt;/h3&gt;
+
+&lt;p&gt;Both posts and pages should be written in markdown, textile, or HTML and may also contain Liquid templating syntax.
+Both posts and pages can have meta-data assigned on a per-page basis such as title, url path, as well as arbitrary custom meta-data.&lt;/p&gt;
+
+&lt;h3&gt;Working With Posts&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Creating a Post&lt;/strong&gt; &lt;br/&gt;
+Posts are created by properly formatting a file and placing it the &lt;code&gt;_posts&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
+A post must have a valid filename in the form &lt;code&gt;YEAR-MONTH-DATE-title.MARKUP&lt;/code&gt; and be placed in the &lt;code&gt;_posts&lt;/code&gt; directory.
+If the data format is invalid Jekyll will not recognize the file as a post. The date and title are automatically parsed from the filename of the post file.
+Additionally, each file must have &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;YAML Front-Matter&lt;/a&gt; prepended to its content.
+YAML Front-Matter is a valid YAML syntax specifying meta-data for the given file.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Order&lt;/strong&gt;&lt;br/&gt;
+Ordering is an important part of Jekyll but it is hard to specify a custom ordering strategy.
+Only reverse chronological and chronological ordering is supported in Jekyll.&lt;/p&gt;
+
+&lt;p&gt;Since the date is hard-coded into the filename format, to change the order, you must change the dates in the filenames.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Tags&lt;/strong&gt; &lt;br/&gt;
+Posts can have tags associated with them as part of their meta-data.
+Tags may be placed on posts by providing them in the post's YAML front matter.
+You have access to the post-specific tags in the templates. These tags also get added to the sitewide collection.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Categories&lt;/strong&gt; &lt;br/&gt;
+Posts may be categorized by providing one or more categories in the YAML front matter.
+Categories offer more significance over tags in that they can be reflected in the URL path to the given post.
+Note categories in Jekyll work in a specific way.
+If you define more than one category you are defining a category hierarchy &quot;set&quot;.
+Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---
+title :  Hello World
+categories : [lessons, beginner]
+---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This defines the category hierarchy &quot;lessons/beginner&quot;. Note this is &lt;em&gt;one category&lt;/em&gt; node in Jekyll.
+You won't find &quot;lessons&quot; and &quot;beginner&quot; as two separate categories unless you define them elsewhere as singular categories.&lt;/p&gt;
+
+&lt;h3&gt;Working With Pages&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Creating a Page&lt;/strong&gt;&lt;br/&gt;
+Pages are created by properly formatting a file and placing it anywhere in the root directory or subdirectories that do &lt;em&gt;not&lt;/em&gt; start with an underscore.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
+In order to register as a Jekyll page the file must contain &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;YAML Front-Matter&lt;/a&gt;.
+Registering a page means 1) that Jekyll will process the page and 2) that the page object will be available in the &lt;code&gt;site.pages&lt;/code&gt; array for inclusion into your templates.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Categories and Tags&lt;/strong&gt;&lt;br/&gt;
+Pages do not compute categories nor tags so defining them will have no effect.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Sub-Directories&lt;/strong&gt;&lt;br/&gt;
+If pages are defined in sub-directories, the path to the page will be reflected in the url.
+Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.
+|-- people
+    |-- bob
+        |-- essay.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This page will be available at &lt;code&gt;http://yourdomain.com/people/bob/essay.html&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Recommended Pages&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;index.html&lt;/strong&gt;&lt;br/&gt;
+You will always want to define the root index.html page as this will display on your root URL.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;404.html&lt;/strong&gt;&lt;br/&gt;
+Create a root 404.html page and GitHub Pages will serve it as your 404 response.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;sitemap.html&lt;/strong&gt;&lt;br/&gt;
+Generating a sitemap is good practice for SEO.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;about.html&lt;/strong&gt;&lt;br/&gt;
+A nice about page is easy to do and gives the human perspective to your website.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;h2&gt;Templates in Jekyll&lt;/h2&gt;
+
+&lt;p&gt;Templates are used to contain a page's or post's content.
+All templates have access to a global site object variable: &lt;code&gt;site&lt;/code&gt; as well as a page object variable: &lt;code&gt;page&lt;/code&gt;.
+The site variable holds all accessible content and metadata relative to the site.
+The page variable holds accessible data for the given page or post being rendered at that point.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Create a Template&lt;/strong&gt;&lt;br/&gt;
+Templates are created by properly formatting a file and placing it in the &lt;code&gt;_layouts&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
+Templates should be coded in HTML and contain YAML Front Matter.
+All templates can contain Liquid code to work with your site's data.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Rending Page/Post Content in a Template&lt;/strong&gt;&lt;br/&gt;
+There is a special variable in all templates named : &lt;code&gt;content&lt;/code&gt;.
+The &lt;code&gt;content&lt;/code&gt; variable holds the page/post content including any sub-template content previously defined.
+Render the content variable wherever you want your main content to be injected into your template:&lt;/p&gt;
+
+&lt;p&gt;  &lt;pre&gt;&lt;code&gt;...
+&amp;lt;body&amp;gt;
+  &amp;lt;div id=&quot;sidebar&quot;&amp;gt; ... &amp;lt;/div&amp;gt;
+  &amp;lt;div id=&quot;main&quot;&amp;gt;
+    &amp;#123;{content}&amp;#125;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+...&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+
+&lt;h3&gt;Sub-Templates&lt;/h3&gt;
+
+&lt;p&gt;Sub-templates are exactly templates with the only difference being they
+define another &quot;root&quot; layout/template within their YAML Front Matter.
+This essentially means a template will render inside of another template.&lt;/p&gt;
+
+&lt;h3&gt;Includes&lt;/h3&gt;
+
+&lt;p&gt;In Jekyll you can define include files by placing them in the &lt;code&gt;_includes&lt;/code&gt; folder.
+Includes are NOT templates, rather they are just code snippets that get included into templates.
+In this way, you can treat the code inside includes as if it was native to the parent template.&lt;/p&gt;
+
+&lt;p&gt;Any valid template code may be used in includes.&lt;/p&gt;
+
+&lt;h2&gt;Using Liquid for Templating&lt;/h2&gt;
+
+&lt;p&gt;Templating is perhaps the most confusing and frustrating part of Jekyll.
+This is mainly due to the fact that Jekyll templates must use the Liquid Templating Language.&lt;/p&gt;
+
+&lt;h3&gt;What is Liquid?&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/Shopify/liquid&quot;&gt;Liquid&lt;/a&gt; is a secure templating language developed by &lt;a href=&quot;http://shopify.com&quot;&gt;Shopify&lt;/a&gt;.
+Liquid is designed for end-users to be able to execute logic within template files
+without imposing any security risk on the hosting server.&lt;/p&gt;
+
+&lt;p&gt;Jekyll uses Liquid to generate the post content within the final page layout structure and as the primary interface for working with
+your site and post/page data.&lt;/p&gt;
+
+&lt;h3&gt;Why Do We Have to Use Liquid?&lt;/h3&gt;
+
+&lt;p&gt;GitHub uses Jekyll to power &lt;a href=&quot;http://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;.
+GitHub cannot afford to run arbitrary code on their servers so they lock developers down via Liquid.&lt;/p&gt;
+
+&lt;h3&gt;Liquid is Not Programmer-Friendly.&lt;/h3&gt;
+
+&lt;p&gt;The short story is liquid is not real code and its not intended to execute real code.
+The point being you can't do jackshit in liquid that hasn't been allowed explicitly by the implementation.
+What's more you can only access data-structures that have been explicitly passed to the template.&lt;/p&gt;
+
+&lt;p&gt;In Jekyll's case it is not possible to alter what is passed to Liquid without hacking the gem or running custom plugins.
+Both of which cannot be supported by GitHub Pages.&lt;/p&gt;
+
+&lt;p&gt;As a programmer - this is very frustrating.&lt;/p&gt;
+
+&lt;p&gt;But rather than look a gift horse in the mouth we are going to
+suck it up and view it as an opportunity to work around limitations and adopt client-side solutions when possible.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Aside&lt;/strong&gt; &lt;br/&gt;
+My personal stance is to not invest time trying to hack liquid. It's really unnecessary
+&lt;em&gt;from a programmer's&lt;/em&gt; perspective. That is to say if you have the ability to run custom plugins (i.e. run arbitrary ruby code)
+you are better off sticking with ruby. Toward that end I've built &lt;a href=&quot;http://github.com/plusjade/mustache-with-jekyll&quot;&gt;Mustache-with-Jekyll&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Static Assets&lt;/h2&gt;
+
+&lt;p&gt;Static assets are any file in the root or non-underscored subfolders that are not pages.
+That is they have no valid YAML Front Matter and are thus not treated as Jekyll Pages.&lt;/p&gt;
+
+&lt;p&gt;Static assets should be used for images, css, and javascript files.&lt;/p&gt;
+
+&lt;h2&gt;How Jekyll Parses Files&lt;/h2&gt;
+
+&lt;p&gt;Remember Jekyll is a processing engine. There are two main types of parsing in Jekyll.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Content parsing.&lt;/strong&gt; &lt;br/&gt;
+  This is done with textile or markdown.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Template parsing.&lt;/strong&gt; &lt;br/&gt;
+This is done with the liquid templating language.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;And thus there are two main types of file formats needed for this parsing.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Post and Page files.&lt;/strong&gt;&lt;br/&gt;
+All content in Jekyll is either a post or a page so valid posts and pages are parsed with markdown or textile.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Template files.&lt;/strong&gt;  &lt;br/&gt;
+  These files go in &lt;code&gt;_layouts&lt;/code&gt; folder and contain your blogs &lt;strong&gt;templates&lt;/strong&gt;. They should be made in HTML with the help of Liquid syntax.
+  Since include files are simply injected into templates they are essentially parsed as if they were native to the template.&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Arbitrary files and folders.&lt;/strong&gt; &lt;br/&gt;
+Files that &lt;em&gt;are not&lt;/em&gt; valid pages are treated as static content and pass through
+Jekyll untouched and reside on your blog in the exact structure and format they originally existed in.&lt;/p&gt;
+
+&lt;h3&gt;Formatting Files for Parsing.&lt;/h3&gt;
+
+&lt;p&gt;We've outlined the need for valid formatting using &lt;strong&gt;YAML Front Matter&lt;/strong&gt;.
+Templates, posts, and pages all need to provide valid YAML Front Matter even if the Matter is empty.
+This is the only way Jekyll knows you want the file processed.&lt;/p&gt;
+
+&lt;p&gt;YAML Front Matter must be prepended to the top of template/post/page files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---
+layout: post
+category : pages
+tags : [how-to, jekyll]
+---
+
+... contents ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Three hyphens on a new line start the Front-Matter block and three hyphens on a new line end the block.
+The data inside the block must be valid YAML.&lt;/p&gt;
+
+&lt;p&gt;Configuration parameters for YAML Front-Matter is outlined here:
+&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;A comprehensive explanation of YAML Front Matter&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4&gt;Defining Layouts for Posts and Templates Parsing.&lt;/h4&gt;
+
+&lt;p&gt;The &lt;code&gt;layout&lt;/code&gt; parameter in the YAML Front Matter defines the template file for which the given post or template should be injected into.
+If a template file specifies its own layout, it is effectively being used as a &lt;code&gt;sub-template.&lt;/code&gt;
+That is to say loading a post file into a template file that refers to another template file with work in the way you'd expect; as a nested sub-template.&lt;/p&gt;
+
+&lt;h2&gt;How Jekyll Generates the Final Static Files.&lt;/h2&gt;
+
+&lt;p&gt;Ultimately, Jekyll's job is to generate a static representation of your website.
+The following is an outline of how that's done:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll collects data.&lt;/strong&gt; &lt;br/&gt;
+Jekyll scans the posts directory and collects all posts files as post objects. It then scans the layout assets and collects those and finally scans other directories in search of pages.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll computes data.&lt;/strong&gt; &lt;br/&gt;
+Jekyll takes these objects, computes metadata (permalinks, tags, categories, titles, dates) from them and constructs one
+big &lt;code&gt;site&lt;/code&gt; object that holds all the posts, pages, layouts, and respective metadata.
+At this stage your site is one big computed ruby object.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll liquifies posts and templates.&lt;/strong&gt;&lt;br/&gt;
+Next jekyll loops through each post file and converts (through markdown or textile) and &lt;strong&gt;liquifies&lt;/strong&gt; the post inside of its respective layout(s).
+Once the post is parsed and liquified inside the the proper layout structure, the layout itself is &quot;liquified&quot;. &lt;br/&gt;
+ &lt;strong&gt;Liquification&lt;/strong&gt; is defined as follows: Jekyll initiates a Liquid template, and passes a simpler hash representation of the ruby site object as well as a simpler
+hash representation of the ruby post object. These simplified data structures are what you have access to in the templates.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll generates output.&lt;/strong&gt; &lt;br/&gt;
+ Finally the liquid templates are &quot;rendered&quot;, thereby processing any liquid syntax provided in the templates
+ and saving the final, static representation of the file.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Notes.&lt;/strong&gt;&lt;br/&gt;
+Because Jekyll computes the entire site in one fell swoop, each template is given access to
+a global &lt;code&gt;site&lt;/code&gt; hash that contains useful data. It is this data that you'll iterate through and format
+using the Liquid tags and filters in order to render it onto a given page.&lt;/p&gt;
+
+&lt;p&gt;Remember, in Jekyll you are an end-user. Your API has only two components:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The manner in which you setup your directory.&lt;/li&gt;
+&lt;li&gt;The liquid syntax and variables passed into the liquid templates.&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;All the data objects available to you in the templates via Liquid are outlined in the &lt;strong&gt;API Section&lt;/strong&gt; of Jekyll-Bootstrap.
+You can also read the original documentation here: &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Template-Data&quot;&gt;https://github.com/mojombo/jekyll/wiki/Template-Data&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I hope this paints a clearer picture of what Jekyll is doing and why it works the way it does.
+As noted, our main programming constraint is the fact that our API is limited to what is accessible via Liquid and Liquid only.&lt;/p&gt;
+
+&lt;p&gt;Jekyll-bootstrap is intended to provide helper methods and strategies aimed at making it more intuitive and easier to work with Jekyll =)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Thank you&lt;/strong&gt; for reading this far.&lt;/p&gt;
+
+&lt;h2&gt;Next Steps&lt;/h2&gt;
+
+&lt;p&gt;Please take a look at &lt;a href=&quot;&quot;&gt;&lt;/a&gt;
+or jump right into &lt;a href=&quot;&quot;&gt;Usage&lt;/a&gt; if you'd like.&lt;/p&gt;
+</description>
+                <link>http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction</link>
+                <guid>http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction</guid>
+                <pubDate>2011-12-29T00:00:00+08:00</pubDate>
+        </item>
+
+
+</channel>
+</rss>

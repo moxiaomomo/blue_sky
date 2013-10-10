@@ -1,0 +1,13 @@
+
+http://moxiaomomo.github.io/blue_sky/archive.html
+http://moxiaomomo.github.io/blue_sky/pages.html
+http://moxiaomomo.github.io/blue_sky/index.html
+http://moxiaomomo.github.io/blue_sky/categories.html
+http://moxiaomomo.github.io/blue_sky/atom.xml
+http://moxiaomomo.github.io/blue_sky/rss.xml
+http://moxiaomomo.github.io/blue_sky/sitemap.txt
+http://moxiaomomo.github.io/blue_sky/tags.html
+
+http://moxiaomomo.github.io/blue_sky/2013/09/24/terris
+http://moxiaomomo.github.io/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row
+http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction
