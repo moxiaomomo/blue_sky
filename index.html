@@ -34,8 +34,9 @@ title: 我的Blog
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section class="inner">
+      <h1>Tech</h1>
       <ul>
-      　　{% for post in site.posts %}
+      　　{% for post in site.posts.tech %}
       　　　　<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
       　　{% endfor %}
       </ul>
