@@ -2,187 +2,142 @@
 title: 我的Blog
 ---
 
-<!DOCTYPE html>
-<html>
-
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="梦想的天空 : chase my ideal forever" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Blue sky</title>
-  </head>
-
-  <body>
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/moxiaomomo/blue_sky">访问GitHub</a>
-
-          <h1 id="project_title">Blue sky</h1>
-          <h2 id="project_tagline">python,C++,mysql</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/moxiaomomo/blue_sky/archive/gh-pages.zip">Download this project as a .zip file</a>
-              <!--<a class="tar_download_link" href="https://github.com/moxiaomomo/blue_sky/tarball/master">Download this project as a tar.gz file</a> -->
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-	<div class="row">
-	  <div class="span9">
-	  {% for post in paginator.posts %}
-	  {% assign content = post.content %}
-	  <section id="{{ post.url | replace:'/',''}}">
-	    <article>
-	      <header>
-	      <h2><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h2>
-	      <div class="info">
-			Categories：
-				{%for cg in post.categories%}
-				<a href="/categories.html#{{cg}}-ref">{{cg}}</a>
-				{%if forloop.index < forloop.length %}
-				,
-				{%endif%}
-				{%endfor%}
-			|
-			Tags：
-				{%for cg in post.tags%}
-				<a href="/tags.html#{{cg}}-ref">{{cg}}</a>
-				{%if forloop.index < forloop.length %}
-				,
-				{%endif%}
-				{%endfor%}
-			|
-			Time：<time date="{{ post.date|date: '%Y-%m-%d' }}">{{ post.date|date: "%Y-%m-%d"}}</time>
-			<a href='{{post.url}}#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
-		</div>
-	    </header>
-	    <div class="content">
-		  {% if post.content contains "<!-- more -->" %}
-		    {{ post.content | split:"<!-- more -->" | first % }}
-		    <h4><a href='{{post.url}}' title='Read more...'>Read more...</a></h4>
-		  {% else %}
-		    {{ post.content}}
-		  {% endif %}
-	   </div>
-	    </article>
-	  </section>
-	  {% endfor %}
-	  <div class="pagination">
-	      <ul>{% if paginator.previous_page %}
-		<li class="next"><a href='{% if paginator.previous_page > 1 %}/page{{ paginator.previous_page}}{% else %}/{% endif %}'>&larr; Previous</a></li>{% endif %}
-		<li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>{% if paginator.next_page %}
-		<li class="prev"><a href='/page{{ paginator.next_page }}'>Next &rarr;</a></li>{% endif %}
-	      </ul>
-	  </div>
-	  </div>
-
-	  <aside class="span3">
-	    <section>
-	   	 <h2>About me</h2>
-		<div>
-	   	 从事移动互联网服务端数据维护工作，擅长python开发及mysql管理。邮箱:moxiaomomo@gmail.com
-		</div>
-	    </section>
-
-	    <section>
-		  {% unless site.categories == empty %}
-		    <h2>Categories</h2>
-		    <ul id="category-list">
-		      {% assign categories_list = site.categories %}
-		      {% include JB/categories_list %}
-		    </ul>
-		  {% endunless %}
-	     </section>
-
-	    <section>
-	    <h2>Recent Posts</h2>
-	    <ul id="recent_posts">{% for rpost in site.posts limit: 20 %}
-	      <li class="post">
-		<a href="{{ BASE_PATH }}{{ rpost.url }}">{{ rpost.title }}</a>
-	      </li>{% endfor %}
-	    </ul>
-	    </section>
-	    
-		<script type="text/javascript">
-		var duoshuoQuery = {short_name:"javachen"};
-		(function() {
-		    var ds = document.createElement('script');
-		    ds.type = 'text/javascript';ds.async = true;
-		    ds.src = 'http://static.duoshuo.com/embed.js';
-		    ds.charset = 'UTF-8';
-		    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-		})();
-		</script>
-
-		<section>
-			<h2>Recent Comments</h2>
-			<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="100"></ul>
-		</section>
-
-		<section>
-			<h2>Recent Vistors</h2>
-			 <ul class="ds-recent-visitors" data-num-items="18"></ul>
-		</section>
-
-	     <section>
-	   	 <h2>WeiBo</h2>
-	   	 <iframe id="sina_widget_1222789964" style="width:100%; height:500px;" frameborder="0" scrolling="no" src="http://v.t.sina.com.cn/widget/widget_blog.php?uid=1222789964&height=500&skin=wd_01&showpic=0"></iframe>
-	    </section>
-	    
-	    <section>
-	    <h2>Links</h2>
-	   	<ul>
-		<li>Java开发
-				<ul>
-					<li><a href="http://blog.frankel.ch/" target="_blank">A Java geek</a></li>
-					<li><a href="http://xinwang.osdn.cn/" target="_blank">辛望的开发日志</a></li>
-					<li><a href="http://kohsuke.org/" target="_blank">Kohsuke Kawaguchi</a></li>
-					<li><a href="http://www.longtask.com/blog/" target="_blank">龙浩的blog</a>就职于阿里巴巴云计算</li>
-					<li><a href="http://jdkcn.com/" target="_blank">莫多泡泡</a>A Java programmeri</li>
-					<li><a href="http://hackfisher.info/" target="_blank">HackFisher</a></li>
-					<li><a href="http://bluedash.net/categories/%E7%BC%96%E7%A8%8B/spaces" target="_blank">蓝点</a></li>
-					<li><a href="http://javafans.info/" target="_blank">Java爱好者</a></li>
-					<li><a href="http://www.yankay.com/" target="_blank">我自然</a>颜开的博客</li>
-				</ul>
-			</li>
-			<li>前端开发
-				<ul>
-					<li><a href="http://panweizeng.com/" target="_blank">潘魏增</a>美团网前端工程师</li>
-					<li><a href="http://14px.com/" target="_blank">十四像素</a></li>
-				</ul>
-			</li>
-			<li>其他
-				<ul>
-					<li><a href="http://blog.boluotou.com/" target="_blank">圆木菠萝罐</a>一个大学学长</li>
-					<li><a href="http://blog.codingnow.com/" target="_blank">云风的BLOG</a></li>
-					<li><a href="http://www.yy42.net/blog/" target="_blank">程显峰</a></li>
-					<li><a href="http://coolshell.cn/" target="_blank">酷壳–CoolShell.cn</a></li>
-					<li><a href="http://www.coder4.com/" target="_blank">四号程序员</a></li>
-					<li><a href="http://timyang.net/" target="_blank">Tim[后端技术]</a></li>
-
-					<li><a href="http://www.agiledon.com/" target="_blank">捷道</a>Thoughtworks架构师</li>
-					<li><a href="http://log4d.com/" target="_blank">Log4D</a></li>
-
-					<li><a href="http://dev.ymeng.net/" target="_blank">Dev Notes</a></li>
-					<li><a href="http://www.dbanotes.net/" target="_blank">DBA Notes</a></li>		
-				</ul>
-			</li>
-		</ul>
-	  </section>
-	  </aside>
+<div class="row">
+  <div class="span9">
+  {% for post in paginator.posts %}
+  {% assign content = post.content %}
+  <section id="{{ post.url | replace:'/',''}}">
+    <article>
+      <header>
+      <h2><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h2>
+      <div class="info">
+		Categories：
+			{%for cg in post.categories%}
+			<a href="/categories.html#{{cg}}-ref">{{cg}}</a>
+			{%if forloop.index < forloop.length %}
+			,
+			{%endif%}
+			{%endfor%}
+		|
+		Tags：
+			{%for cg in post.tags%}
+			<a href="/tags.html#{{cg}}-ref">{{cg}}</a>
+			{%if forloop.index < forloop.length %}
+			,
+			{%endif%}
+			{%endfor%}
+		|
+		Time：<time date="{{ post.date|date: '%Y-%m-%d' }}">{{ post.date|date: "%Y-%m-%d"}}</time>
+		<a href='{{post.url}}#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
 	</div>
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Blue sky maintained by <a href="https://github.com/moxiaomomo">moxiaomomo</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    </header>
+    <div class="content">
+	  {% if post.content contains "<!-- more -->" %}
+	    {{ post.content | split:"<!-- more -->" | first % }}
+	    <h4><a href='{{post.url}}' title='Read more...'>Read more...</a></h4>
+	  {% else %}
+	    {{ post.content}}
+	  {% endif %}
+   </div>
+    </article>
+  </section>
+  {% endfor %}
+  <div class="pagination">
+      <ul>{% if paginator.previous_page %}
+	<li class="next"><a href='{% if paginator.previous_page > 1 %}/page{{ paginator.previous_page}}{% else %}/{% endif %}'>&larr; Previous</a></li>{% endif %}
+	<li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>{% if paginator.next_page %}
+	<li class="prev"><a href='/page{{ paginator.next_page }}'>Next &rarr;</a></li>{% endif %}
+      </ul>
+  </div>
+  </div>
 
-  </body>
-</html>
+  <aside class="span3">
+    <section>
+   	 <h2>About me</h2>
+	<div>
+   	 从事移动互联网服务端数据维护工作，擅长python开发及mysql管理。邮箱:moxiaomomo@gmail.com
+	</div>
+    </section>
+
+    <section>
+	  {% unless site.categories == empty %}
+	    <h2>Categories</h2>
+	    <ul id="category-list">
+	      {% assign categories_list = site.categories %}
+	      {% include JB/categories_list %}
+	    </ul>
+	  {% endunless %}
+     </section>
+
+    <section>
+    <h2>Recent Posts</h2>
+    <ul id="recent_posts">{% for rpost in site.posts limit: 20 %}
+      <li class="post">
+	<a href="{{ BASE_PATH }}{{ rpost.url }}">{{ rpost.title }}</a>
+      </li>{% endfor %}
+    </ul>
+    </section>
+    
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"moxiaomomo"};
+	(function() {
+	    var ds = document.createElement('script');
+	    ds.type = 'text/javascript';ds.async = true;
+	    ds.src = 'http://static.duoshuo.com/embed.js';
+	    ds.charset = 'UTF-8';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+	<section>
+		<h2>Recent Comments</h2>
+		<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="100"></ul>
+	</section>
+
+	<section>
+		<h2>Recent Vistors</h2>
+		 <ul class="ds-recent-visitors" data-num-items="18"></ul>
+	</section>
+    
+    <section>
+    <h2>Links</h2>
+   	<ul>
+	<li>Java开发
+			<ul>
+				<li><a href="http://blog.frankel.ch/" target="_blank">A Java geek</a></li>
+				<li><a href="http://xinwang.osdn.cn/" target="_blank">辛望的开发日志</a></li>
+				<li><a href="http://kohsuke.org/" target="_blank">Kohsuke Kawaguchi</a></li>
+				<li><a href="http://www.longtask.com/blog/" target="_blank">龙浩的blog</a>就职于阿里巴巴云计算</li>
+				<li><a href="http://jdkcn.com/" target="_blank">莫多泡泡</a>A Java programmeri</li>
+				<li><a href="http://hackfisher.info/" target="_blank">HackFisher</a></li>
+				<li><a href="http://bluedash.net/categories/%E7%BC%96%E7%A8%8B/spaces" target="_blank">蓝点</a></li>
+				<li><a href="http://javafans.info/" target="_blank">Java爱好者</a></li>
+				<li><a href="http://www.yankay.com/" target="_blank">我自然</a>颜开的博客</li>
+			</ul>
+		</li>
+		<li>前端开发
+			<ul>
+				<li><a href="http://panweizeng.com/" target="_blank">潘魏增</a>美团网前端工程师</li>
+				<li><a href="http://14px.com/" target="_blank">十四像素</a></li>
+			</ul>
+		</li>
+		<li>其他
+			<ul>
+				<li><a href="http://blog.boluotou.com/" target="_blank">圆木菠萝罐</a>一个大学学长</li>
+				<li><a href="http://blog.codingnow.com/" target="_blank">云风的BLOG</a></li>
+				<li><a href="http://www.yy42.net/blog/" target="_blank">程显峰</a></li>
+				<li><a href="http://coolshell.cn/" target="_blank">酷壳–CoolShell.cn</a></li>
+				<li><a href="http://www.coder4.com/" target="_blank">四号程序员</a></li>
+				<li><a href="http://timyang.net/" target="_blank">Tim[后端技术]</a></li>
+
+				<li><a href="http://www.agiledon.com/" target="_blank">捷道</a>Thoughtworks架构师</li>
+				<li><a href="http://log4d.com/" target="_blank">Log4D</a></li>
+
+				<li><a href="http://dev.ymeng.net/" target="_blank">Dev Notes</a></li>
+				<li><a href="http://www.dbanotes.net/" target="_blank">DBA Notes</a></li>		
+			</ul>
+		</li>
+	</ul>
+  </section>
+  </aside>
+</div>
