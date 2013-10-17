@@ -1,32 +1,52 @@
+{% if page.title %}
 <div class="page-header">
-  <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
+  	<h1>{{ page.title }} {% if page.tagline %} <small>{{ page.tagline }}</small> {% endif %}</h1>
+	<div class="info">
+		Categories：{%for cg in page.categories%}<a href="/categories.html#{{cg}}-ref">{{cg}}</a>{%if forloop.index < forloop.length %},{%endif%}{%endfor%}
+		| Tags：{%for cg in page.tags%}<a href="/tags.html#{{cg}}-ref">{{cg}}</a>{%if forloop.index < forloop.length %},{%endif%}{%endfor%}
+		| Time：<time date="{{ page.date|date: '%Y-%m-%d' }}">{{ page.date|date: "%Y-%m-%d"}}</time>
+		<a href='{{post.url}}#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
 </div>
+{% endif %}
 
-<div class="row-fluid post-full">
-  <div class="span12">
-    <div class="date">
-      <span>{{ page.date | date_to_long_string }}</span>
+<div class="row">
+  <div class="span9">
+    
+    {{ content }}
+
+    <br/>
+    <div class="copyright">
+	<p><strong>本文固定链接：</strong><a href='{{page.url}}'>http://blog.javachen.com{{page.url}}</a></p>
+	<p><strong>原创文章,转载请注明出处：</strong><a href='{{page.url}}'>JavaChen Blog</a></p>
     </div>
-    <div class="content">
-      {{ content }}
+     
+    <div style="float:right">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style_32x32">
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_cqq"></a>
+	<a class="jiathis_button_sdonote"></a>
+	<a class="jiathis_button_ydnote"></a>
+	<a class="jiathis_button_qingbiji"></a>
+	<a href="http://www.jiathis.com/share?uid=1709061" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+	</div>
+	<script type="text/javascript" >
+	var jiathis_config={
+		data_track_clickback:true,
+		summary:"",
+		hideMore:false
+	}
+	</script>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1709061" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
     </div>
 
-  {% unless page.categories == empty %}
-    <ul class="tag_box inline">
-      <li><i class="icon-folder-open"></i></li>
-      {% assign categories_list = page.categories %}
-      {% include JB/categories_list %}
-    </ul>
-  {% endunless %}  
-
-  {% unless page.tags == empty %}
-    <ul class="tag_box inline">
-      <li><i class="icon-tags"></i></li>
-      {% assign tags_list = page.tags %}
-      {% include JB/tags_list %}
-    </ul>
-  {% endunless %}  
-
+    <!-- wumi Button BEGIN -->
+    <script type="text/javascript" id="wumiiRelatedItems"></script>
+    <!-- wumi Button END -->
     <hr>
     <div class="pagination">
       <ul>
@@ -46,4 +66,77 @@
     <hr>
     {% include JB/comments %}
   </div>
+  <div class="span3">
+  <section>
+  {% unless page.tags == empty %}
+    <h2>Tags</h2>
+    <ul class="tag_box">
+    {% assign tags_list = page.tags %}
+    {% include JB/tags_list %}
+    </ul>
+  {% endunless %}
+  </section>  
+
+  <section>
+  {% unless site.categories == empty %}
+    <h2>Categories</h2>
+    <ul id="category-list">
+      {% assign categories_list = site.categories %}
+      {% include JB/categories_list %}
+    </ul>
+  {% endunless %}
+  </section>
+
+  <section>
+  <h2>Related Posts</h2>
+  <ul>
+   {% for post in site.related_posts limit:10 %}
+   <li><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
+   {% endfor %}
+  </ul>
+  </section>  
+  <section>
+    <h2>Recent Posts</h2>
+    <ul id="recent_posts">
+    {% for rpost in site.posts limit: 20 %}
+      <li class="post" >
+        <a href="{{ BASE_PATH }}{{ rpost.url }}">{{ rpost.title }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+  
+  </div>
 </div>
+
+<div id="comments">
+	<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread" data-title="{{ page.title }}" ></div>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"javachen"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</div>
+
+<!-- wumi Button BEGIN -->
+<script type="text/javascript">
+    var wumiiPermaLink = ""; //请用代码生成文章永久的链接
+    var wumiiTitle = "{{ page.url }}"; //请用代码生成文章标题
+    var wumiiTags = "{{ page.tags }}"; //请用代码生成文章标签，以英文逗号分隔，如："标签1,标签2"
+    var wumiiCategories = []; //请用代码生成文章分类，分类名放在 JSONArray 中，如: ["分类1", "分类2"]
+    var wumiiSitePrefix = "http://blog.javachen.com/";
+    var wumiiParams = "&num=7&mode=2&pf=JAVASCRIPT";
+</script>
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+<a href="http://www.wumii.com/widget/relatedItems" style="border:0;">
+    <img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" />
+</a>
+<!-- wumi Button END -->

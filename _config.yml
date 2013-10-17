@@ -1,40 +1,41 @@
-baseurl : /blue_sky
-auto : true
-
 # This is the default format. 
-# For more see: http://jekyllrb.com/docs/permalinks/
+# For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-markdown: rdiscount
+auto: true
 pygments: true
+
+#markdown: rdiscount
+markdown: redcarpet
+paginate: 8
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : my dreams and my life
-tagline: grow up together
+title : moxiaomomo Blog
+tagline: moxiaomomo Blog
 author :
-  name : mo guang
+  name : mo_guang
   email : moxiaomomo@gmail.com
   github : moxiaomomo
-  twitter : username
-  feedburner : feedname
+  twitter : None
+  feedburner : None
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
 # Most places will/should use BASE_PATH to make the urls
 #
 # If you have set a CNAME (pages.github.com) set your custom domain here.
-# Else if you are pushing to username.github.io, replace with your username.
+# Else if you are pushing to username.github.com, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : http://moxiaomomo.github.io/blue_sky
+production_url : http://moxiaomomo.github.com/blue_sky
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
 JB :
-  version : 0.3.0
+  version : 0.2.13
 
   # All links will be namespaced by BASE_PATH if defined.
   # Links in your website should always be prefixed with {{BASE_PATH}}
@@ -44,21 +45,21 @@ JB :
   #   DO NOT SET BASE_PATH 
   #   (urls will be prefixed with "/" and work relatively)
   #
-  # GitHub Pages (http://username.github.io)
+  # GitHub Pages (http://username.github.com)
   #   DO NOT SET BASE_PATH 
   #   (urls will be prefixed with "/" and work relatively)
   #
-  # GitHub Project Pages (http://username.github.io/project-name)
+  # GitHub Project Pages (http://username.github.com/project-name)
   #
   #   A GitHub Project site exists in the `gh-pages` branch of one of your repositories.
-  #  REQUIRED! Set BASE_PATH to: http://username.github.io/project-name
+  #  REQUIRED! Set BASE_PATH to: http://username.github.com/project-name
   #
   # CAUTION:
   #   - When in Localhost, your site will run from root "/" regardless of BASE_PATH
   #   - Only the following values are falsy: ["", null, false]
   #   - When setting BASE_PATH it must be a valid url.
   #     This means always setting the protocol (http|https) or prefixing with "/"
-  BASE_PATH : false #http://moxiaomomo.github.io/blue_sky/
+  BASE_PATH : false
 
   # By default, the asset_path is automatically defined relative to BASE_PATH plus the enabled theme.
   # ex: [BASE_PATH]/assets/themes/[THEME-NAME]
@@ -68,41 +69,45 @@ JB :
   #   http://s3.amazonaws.com/yoursite/themes/watermelon
   #   /assets
   #
-  ASSET_PATH : /assets/themes
+  ASSET_PATH : false
 
   # These paths are to the main pages Jekyll-Bootstrap ships with.
-  # Some JB helpers refer to these paths; change them here if needed.
+  # Some JB helpers refer to these paths; change theme here if needed.
   #
   archive_path: /archive.html
   categories_path : /categories.html
   tags_path : /tags.html
-  atom_path : /atom.xml
-  rss_path : /rss.xml
 
   # Settings for comments helper
   # Set 'provider' to the comment provider you want to use.
   # Set 'provider' to false to turn commenting off globally.
   #
   comments :
-    provider : duoshuo
-    duoshuo :
-      short_name : moxiaomomo
-
+    provider : false
+    disqus :
+      short_name : 
+    livefyre :
+      site_id : 
+    intensedebate :
+      account : 
+    facebook :
+      appid : 123
+      num_posts: 5
+      width: 580
+      colorscheme: light
+   
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
   # Set 'provider' to false to turn analytics off globally.
   #        
   analytics :
-    provider : google 
+    provider : false 
     google : 
-        tracking_id : 'UA-123-12'
+        tracking_id : ''
     getclicky :
       site_id : 
     mixpanel :
-        token : '_MIXPANEL_TOKEN_'
-    piwik :
-        baseURL : 'myserver.tld/piwik' # Piwik installation address (without protocol)
-        idsite : '1'                   # the id of the site on Piwik
+        token : '_trackPageview'
 
   # Settings for sharing helper. 
   # Sharing is for things like tweet, plusone, like, reddit buttons etc.
