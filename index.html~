@@ -103,7 +103,8 @@ tagline:
     <h2>Links</h2>
    	<ul>
 	<li>Java开发
-			<ul>
+			<ul>                                
+				<li><a href="http://blog.javachen.com/" target="_blank">javachen blog</a></li>
 				<li><a href="http://blog.frankel.ch/" target="_blank">A Java geek</a></li>
 				<li><a href="http://xinwang.osdn.cn/" target="_blank">辛望的开发日志</a></li>
 				<li><a href="http://kohsuke.org/" target="_blank">Kohsuke Kawaguchi</a></li>
@@ -134,6 +135,11 @@ tagline:
 
 				<li><a href="http://dev.ymeng.net/" target="_blank">Dev Notes</a></li>
 				<li><a href="http://www.dbanotes.net/" target="_blank">DBA Notes</a></li>		
+			</ul>
+		</li>
+                <li>我的其他博客
+			<ul>
+				<li><a href="http://blog.csdn.net/moxiaomomo/article/" target="_blank">莫广</a>moxiaomomo</li>
 			</ul>
 		</li>
 	</ul>

@@ -1,0 +1,106 @@
+---
+layout: default
+title: 【C++】pku 1273_Drainage Ditches 最大流问题
+---
+
+<p>经典网络流问题，使用Ford Fulkson算法。
+
+思路大概是：求排水沟网络中的最大排水量。
+                  从源点开始，每次寻找一条增广路径，更新一次，再重新找增广路径……直到没有为止。即每次寻找一条由源点到汇点的路径；
+                  把路径全部找完之后，剩余网络是最优网络，即能实现最大流。
+                  寻找增广路径时我使用了广搜，这是比较容易实现的过程。
+ 
+源码：</p>
+<!-- more -->
+<pre><code>
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+
+Source Code
+
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+#include<iostream>
+using namespace std;
+
+int N,M;
+
+int cost[205][205],r;
+int Min[205],pre[205];    
+bool visit[205];   //搜索标记
+
+int bfs()
+{
+	int q[205],start = 0,end = 0;
+	memset(visit,false,sizeof(visit));
+	q[0] = 1;         //以n点为搜索起点
+	visit[1]=true;
+	Min[1]=10000005;
+	while(start<=end)     //搜索的最后一个点将是n+1
+	{
+		int t=q[start];      //下面进行点t的广搜
+		for(int i=1;i<=M;++i)
+		{
+			if(!visit[i]&&cost[t][i]!=0)
+			{   //Min[t],最小值传递;如果前向节点记录的值比当前的边的值要大，则...
+				Min[i]=(Min[t]<cost[t][i])? Min[t] : cost[t][i];
+				//Min[t]的作用是记录路径中权值最小的边
+				pre[i]=t;         //i的前向节点为t,在搜索过程中不断更新
+				if(i==M)
+				{return Min[M];}     //搜索完毕
+				visit[i]=true;
+				q[++end]=i;     //将i并入已搜索的集合
+			}
+		}
+		start++;      //进行下一个点的广搜
+	}
+	if (visit[M])      //如果最后一个点被搜索到，则说明存在增广路径
+       return Min[M];
+    else return -1 ;
+}
+
+void Ford_Fulkerson()
+{
+	int max=0,t,pre_t;
+	while((r = bfs()) != -1) //存在增广路径
+	{
+		max+=r; //最后max的值将是最大流的值
+		t=M;
+		while(t!=1)
+		{
+			pre_t=pre[t]; //找出前向点
+			cost[pre_t][t]-=r;    //前向路径值减一
+			cost[t][pre_t]+=r;    //后向路径值加一
+			t=pre_t;      //更新前向点
+		}
+	}
+	printf("%d/n",max);
+}
+
+int main()
+{
+	int k,x,y;
+	while(scanf ("%d%d",&N,&M) != EOF)
+	{
+		memset(cost,0,sizeof(cost));
+
+		for(int i=0;i<N;++i)
+		{
+			scanf("%d%d%d",&x,&y,&k);
+			cost[x][y]+=k;
+		}
+
+		Ford_Fulkerson();
+	}
+
+    return 0;
+}
+</code></pre>
+<p></P>
+<p>{{>page.date | date_to_string }}</p>
+
+
