@@ -1,0 +1,73 @@
+---
+layout: default
+title: 【C++】快速排序的一种实现
+keywords: C++, algorithm, quicksort
+---
+
+<p废话不多说，直接上代码。
+ 
+源码一：</p>
+<!-- more -->
+<pre class="c++" name="colorcode"><code>
+int partition(int A[],int left,int right)   //其中的一趟排序
+{
+	int p=(left+right)/2;
+	int temp=A[right];          //将选中的标准值放到数组末尾
+	A[right]=A[p];
+	A[p]=temp;
+
+	int a1=left,a2=right-1;
+	while(a1<a2)
+	{
+		while(A[a1]<A[right]){a1++;}   //左子数组寻找比标准值大的索引值
+		while(A[a2]>=A[right]&&a1<a2)a2--;  //右子数组寻找比标准值小的索引值
+		if(a1>=a2)break;
+		int temp1=A[a1];      //交换值
+		A[a1]=A[a2];
+		A[a2]=temp1;		
+	}
+
+	if(A[a1]>=A[right])  //将标准值重新交换回到合适位置
+	{
+	    temp=A[a1];
+	    A[a1]=A[right];
+	    A[right]=temp;
+	}
+
+	return a2;
+}
+
+void QuickSort(int A[],int left,int right)
+{
+	if(left<right)
+	{
+		int pi=partition(A,left,right);
+		if(left<pi)QuickSort(A,left,pi);  //左递归排序
+		if(pi+1<right)QuickSort(A,pi+1,right);//有递归排序
+	}
+}
+</code></pre>
+<p>优化之源码二</P>
+<pre class="c++" name="colorcode"><code>
+void qs(int a[],int s,int e) 
+{
+	int x=a[s],l=s,r=e;
+	//以第一个数为参照做比较
+	if(l>=r)return;
+	while(l<r)
+	{
+		while(l<r&&a[r]>=x)
+			r--; //不小于分界值的留在右边，遇到小于的停止
+		a[l]=a[r];
+		while(l<r&&a[l]<x)l++;
+		//小于分界值的留在左边，遇到不小于的停止
+		a[r]=a[l];
+	}
+	a[r]=x;
+	qs(a,s,r-1);
+	qs(a,r+1,e);//递归 　
+} 
+</code></pre>
+<p>{{>page.date | date_to_string }}</p>
+
+
