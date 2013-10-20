@@ -2,13 +2,13 @@
 layout: default
 title: 【C++】快速排序的一种实现
 keywords: C++, algorithm, quicksort
+category: algorithm
 ---
 
-<p废话不多说，直接上代码。
+<p>废话不多说，直接上代码。
  
 源码一：</p>
-<!-- more -->
-<pre class="c++" name="colorcode"><code>
+<pre class="c++"><code>
 int partition(int A[],int left,int right)   //其中的一趟排序
 {
 	int p=(left+right)/2;
@@ -47,6 +47,7 @@ void QuickSort(int A[],int left,int right)
 	}
 }
 </code></pre>
+<!-- more -->
 <p>优化之源码二</P>
 <pre class="c++" name="colorcode"><code>
 void qs(int a[],int s,int e) 

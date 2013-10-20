@@ -1,13 +1,21 @@
 
-http://moxiaomomo.github.io/blue_sky/archive.html
-http://moxiaomomo.github.io/blue_sky/pages.html
-http://moxiaomomo.github.io/blue_sky/index.html
-http://moxiaomomo.github.io/blue_sky/categories.html
-http://moxiaomomo.github.io/blue_sky/atom.xml
-http://moxiaomomo.github.io/blue_sky/rss.xml
-http://moxiaomomo.github.io/blue_sky/sitemap.txt
-http://moxiaomomo.github.io/blue_sky/tags.html
+http://moxiaomomo.github.com/blue_sky/404.html
+http://moxiaomomo.github.com/blue_sky/about.html
+http://moxiaomomo.github.com/blue_sky/archive.html
+http://moxiaomomo.github.com/blue_sky/atom.xml
+http://moxiaomomo.github.com/blue_sky/categories.html
+http://moxiaomomo.github.com/blue_sky/index.html
+http://moxiaomomo.github.com/blue_sky/pages.html
+http://moxiaomomo.github.com/blue_sky/rss.xml
+http://moxiaomomo.github.com/blue_sky/sitemap.txt
+http://moxiaomomo.github.com/blue_sky/sitemap.xml
+http://moxiaomomo.github.com/blue_sky/tags.html
 
-http://moxiaomomo.github.io/blue_sky/2013/09/24/terris
-http://moxiaomomo.github.io/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row
-http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction
+http://moxiaomomo.github.com/blue_sky/2013/09/24/terris
+http://moxiaomomo.github.com/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row
+http://moxiaomomo.github.com/blue_sky/algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort
+http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579
+http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750
+http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362
+http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182
+http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273

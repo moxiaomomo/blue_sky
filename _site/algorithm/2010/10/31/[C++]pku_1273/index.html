@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>【C++】pku 1273_Drainage Ditches 最大流问题 - moxiaomomo Blog</title>
+    <meta name="author" content="mo_guang">
+    <meta name="copyright" content="© http://moxiamomo.github.com" />
+    <meta property="wb:webmaster" content="61eb31a6e636506d" />
+    <meta name="wumiiVerification" content="eec4ca3c-ccdb-4c0f-9fe3-4499d87649a3" />
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+	<!-- Update these with your own images
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Handlee">
+    <script src="/assets/themes/twitter/js/jquery.js"></script>
+    <script src="/assets/themes/twitter/js/main.js"></script>
+  </head>
+
+  <body data-spy="scroll" data-target=".navbar" data-offset="100" background="/blue_sky/images/bg.jpg">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">moxiaomomo Blog</a>
+          <div class="nav-collapse">
+	    <ul class="nav">
+
+
+              <li><a href="/about.html">About</a></li>
+              <li><a href="/archive.html">Archive</a></li>
+              <li><a href="/sitemap.xml">Sitemap</a></li>
+              <li><a href="/tags.html">Tags</a></li>
+	    </ul>
+            <ul class="nav pull-right" data-subscription="rss">
+	 	 <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+	    </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">     
+        <div class="content">
+            <p>经典网络流问题，使用Ford Fulkson算法。
+
+思路大概是：求排水沟网络中的最大排水量。
+                  从源点开始，每次寻找一条增广路径，更新一次，再重新找增广路径……直到没有为止。即每次寻找一条由源点到汇点的路径；
+                  把路径全部找完之后，剩余网络是最优网络，即能实现最大流。
+                  寻找增广路径时我使用了广搜，这是比较容易实现的过程。
+ 
+源码：</p>
+<!-- more -->
+<pre><code>
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+
+Source Code
+
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+#include<iostream>
+using namespace std;
+
+int N,M;
+
+int cost[205][205],r;
+int Min[205],pre[205];    
+bool visit[205];   //搜索标记
+
+int bfs()
+{
+	int q[205],start = 0,end = 0;
+	memset(visit,false,sizeof(visit));
+	q[0] = 1;         //以n点为搜索起点
+	visit[1]=true;
+	Min[1]=10000005;
+	while(start<=end)     //搜索的最后一个点将是n+1
+	{
+		int t=q[start];      //下面进行点t的广搜
+		for(int i=1;i<=M;++i)
+		{
+			if(!visit[i]&&cost[t][i]!=0)
+			{   //Min[t],最小值传递;如果前向节点记录的值比当前的边的值要大，则...
+				Min[i]=(Min[t]<cost[t][i])? Min[t] : cost[t][i];
+				//Min[t]的作用是记录路径中权值最小的边
+				pre[i]=t;         //i的前向节点为t,在搜索过程中不断更新
+				if(i==M)
+				{return Min[M];}     //搜索完毕
+				visit[i]=true;
+				q[++end]=i;     //将i并入已搜索的集合
+			}
+		}
+		start++;      //进行下一个点的广搜
+	}
+	if (visit[M])      //如果最后一个点被搜索到，则说明存在增广路径
+       return Min[M];
+    else return -1 ;
+}
+
+void Ford_Fulkerson()
+{
+	int max=0,t,pre_t;
+	while((r = bfs()) != -1) //存在增广路径
+	{
+		max+=r; //最后max的值将是最大流的值
+		t=M;
+		while(t!=1)
+		{
+			pre_t=pre[t]; //找出前向点
+			cost[pre_t][t]-=r;    //前向路径值减一
+			cost[t][pre_t]+=r;    //后向路径值加一
+			t=pre_t;      //更新前向点
+		}
+	}
+	printf("%d/n",max);
+}
+
+int main()
+{
+	int k,x,y;
+	while(scanf ("%d%d",&N,&M) != EOF)
+	{
+		memset(cost,0,sizeof(cost));
+
+		for(int i=0;i<N;++i)
+		{
+			scanf("%d%d%d",&x,&y,&k);
+			cost[x][y]+=k;
+		}
+
+		Ford_Fulkerson();
+	}
+
+    return 0;
+}
+</code></pre>
+<p></P>
+<p>31 Oct 2010</p>
+
+
+
+
+        <div id="comments" class="ds-thread" data-title="【C++】pku 1273_Drainage Ditches 最大流问题 - moxiaomomo Blog"></div>
+             <script type="text/javascript">
+                var duoshuoQuery = {short_name:"moxiaomomo"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] 
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+      </div>
+
+      <footer>
+        <p>&copy; mo_guang 2013 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> | <script language="javascript" type="text/javascript" src="http://js.users.51.la/16449946.js"></script>
+<noscript><a href="http://www.51.la/?16449946" target="_blank"><img alt="Statistic" src="http://img.users.51.la/16449946.asp" style="border:none" /></a></noscript>
+        </p>
+      </footer>
+      <div id="toTop"><a href="#">▲</a><a href="#footer">▼</a></div>
+    </div> <!-- /container -->
+    
+  </body>
+</html>
+

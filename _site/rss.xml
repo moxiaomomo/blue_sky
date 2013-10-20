@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
-        <title>my dreams and my life</title>
-        <description>my dreams and my life - mo guang</description>
-        <link>http://moxiaomomo.github.io/blue_sky</link>
-        <link>http://moxiaomomo.github.io/blue_sky</link>
-        <lastBuildDate>2013-10-07T10:36:18+08:00</lastBuildDate>
-        <pubDate>2013-10-07T10:36:18+08:00</pubDate>
+        <title>moxiaomomo Blog</title>
+        <description>moxiaomomo Blog - mo_guang</description>
+        <link>http://moxiaomomo.github.com/blue_sky</link>
+        <link>http://moxiaomomo.github.com/blue_sky</link>
+        <lastBuildDate>2013-10-20T17:19:22+08:00</lastBuildDate>
+        <pubDate>2013-10-20T17:19:22+08:00</pubDate>
         <ttl>1800</ttl>
 
 
         <item>
                 <title>【python】pygame实现简单的俄罗斯方块</title>
-                <description>&lt;h2&gt;【python】pygame实现简单的俄罗斯方块&lt;/h2&gt;
-&lt;p&gt;shapes.py定义了方块类型, common.py定义了一些常量，及地图相关数组等&lt;/p&gt;
+                <description>&lt;p&gt;shapes.py定义了方块类型, common.py定义了一些常量，及地图相关数组等&lt;/p&gt;
 &lt;p&gt;common.py&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
 #!/usr/bin/env python2.7
@@ -63,6 +62,7 @@ SPEED = 1
 FALL_PER_SECONDS = 1  
 
 &lt;/code&gt;&lt;/pre&gt;
+&lt;!-- more --&gt;
 
 &lt;p&gt;shapes.py&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
@@ -184,9 +184,9 @@ def draw(block_data, start_point, map_data, SCREEN, next_block_data=None, game_o
         text = font.render(&quot;Game Over&quot;, True, [0,0,0])
         SCREEN.blit(text, [_start_point[0]*_rect_size[0], (_start_point[1]+3)*_rect_size[1]]) 
 
-'''
+&#39;&#39;&#39;
     更新地图数据(各个方块的值)
-'''		
+&#39;&#39;&#39;		
 def update_map_data(block_data, start_point, map_data, next_block_data):    
     _start_x, _start_y = start_point[0], start_point[1]   
     for y in range(len(block_data)):  
@@ -208,9 +208,9 @@ def update_map_data(block_data, start_point, map_data, next_block_data):
                 if next_block_data[y][x] == 1:
                     map_data[_start_y + y][_start_x + x] = 1
 
-'''
+&#39;&#39;&#39;
     判断方块在地图里面是否发生相撞
-'''   
+&#39;&#39;&#39;   
 def can_move(block_data, start_point, map_data):  
    _start_x, _start_y = start_point[0], start_point[1]  
    for y in range(len(block_data)):  
@@ -227,9 +227,9 @@ def is_game_over(block_data, start_point, map_data, can_move):
                return True
     return False
  
-'''
+&#39;&#39;&#39;
     判断哪些行可以进行消除，返回可以消除的最底行的y坐标
-''' 
+&#39;&#39;&#39; 
 def get_max_full_line(map_data):    
     full_line_y = -1  
     #从最底部开始向上扫描，如果发现整行都为1, 则可以消除该行  
@@ -241,9 +241,9 @@ def get_max_full_line(map_data):
             break    
     return full_line_y  
  
-'''
+&#39;&#39;&#39;
    循环遍历满格行，数组值依次下移
-''' 
+&#39;&#39;&#39; 
 def delete_full_lines(map_data):
     global SCORE
     full_line_y = get_max_full_line(map_data)
@@ -333,7 +333,7 @@ def start_game():
         pygame.quit()
             
  
-if __name__ == '__main__':  
+if __name__ == &#39;__main__&#39;:  
     start_game()
 
 &lt;/code&gt;&lt;/pre&gt;
@@ -343,18 +343,18 @@ if __name__ == '__main__':
 
 &lt;p&gt;未完待续&lt;/p&gt;
 </description>
-                <link>http://moxiaomomo.github.io/blue_sky/2013/09/24/terris</link>
-                <guid>http://moxiaomomo.github.io/blue_sky/2013/09/24/terris</guid>
+                <link>http://moxiaomomo.github.com/blue_sky/2013/09/24/terris</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/2013/09/24/terris</guid>
                 <pubDate>2013-09-24T00:00:00+08:00</pubDate>
         </item>
 
         <item>
                 <title>【python】按行切分文件</title>
-                <description>&lt;h2&gt;【python】按行切分文件&lt;/h2&gt;
-&lt;p&gt;python脚本利用shell命令来实现文本的操作， 这些命令大大减少了我们的代码量。
+                <description>&lt;p&gt;python脚本利用shell命令来实现文本的操作， 这些命令大大减少了我们的代码量。
 比如按行切分文件并返回切分后得到的文件列表，可以利用内建的split命令进行切分。为了返回得到的文件列表名，可以先将文件切分到自建的子目录中，然后通过
 os.listdir获取所有文件，再将这些文件移到上一级目录(即函数参数指定的新目录)，删除自建子目录，最后返回该文件名列表。
 代码如下，如发现问题欢迎指正:&lt;/p&gt;
+&lt;!-- more --&gt;
 &lt;pre&gt;&lt;code&gt;
 # 创建新路径
 def make_dirs(path):
@@ -365,7 +365,7 @@ def make_dirs(path):
 def get_total_lines(file_path):
     if not os.path.exists(file_path):
         return 0
-    cmd = 'wc -l %s' % file_path
+    cmd = &#39;wc -l %s&#39; % file_path
     return int(os.popen(cmd).read().split()[0])
 
 # 函数split_file_by_row: 按行切分文件
@@ -374,7 +374,7 @@ def get_total_lines(file_path):
 # row_cnt: 每个文件最多包含几行
 # suffix_type: 新文件后缀类型，如两位字母或数字
 # return: 切分后的文件列表
-def split_file_by_row(filepath, new_filepath, row_cnt, suffix_type='-d'):
+def split_file_by_row(filepath, new_filepath, row_cnt, suffix_type=&#39;-d&#39;):
     tmp_dir = &quot;/split_file_by_row/&quot;
     make_dirs(new_filepath)
     make_dirs(new_filepath+tmp_dir)
@@ -399,419 +399,521 @@ def split_file_by_row(filepath, new_filepath, row_cnt, suffix_type='-d'):
 
 
 </description>
-                <link>http://moxiaomomo.github.io/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row</link>
-                <guid>http://moxiaomomo.github.io/blue_sky/2013/09/17/[python]split-file-by-row</guid>
+                <link>http://moxiaomomo.github.com/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/2013/09/17/[python]split-file-by-row</guid>
                 <pubDate>2013-09-17T00:00:00+08:00</pubDate>
         </item>
 
         <item>
-                <title>Jekyll Introduction</title>
-                <description>&lt;p&gt;This Jekyll introduction will outline specifically  what Jekyll is and why you would want to use it.
-Directly following the intro we'll learn exactly &lt;em&gt;how&lt;/em&gt; Jekyll does what it does.&lt;/p&gt;
+                <title>【C++】快速排序的一种实现</title>
+                <description>&lt;p&gt;废话不多说，直接上代码。
+ 
+源码一：&lt;/p&gt;
+&lt;pre class=&quot;c++&quot;&gt;&lt;code&gt;
+int partition(int A[],int left,int right)   //其中的一趟排序
+{
+	int p=(left+right)/2;
+	int temp=A[right];          //将选中的标准值放到数组末尾
+	A[right]=A[p];
+	A[p]=temp;
 
-&lt;h2&gt;Overview&lt;/h2&gt;
+	int a1=left,a2=right-1;
+	while(a1&lt;a2)
+	{
+		while(A[a1]&lt;A[right]){a1++;}   //左子数组寻找比标准值大的索引值
+		while(A[a2]&gt;=A[right]&amp;&amp;a1&lt;a2)a2--;  //右子数组寻找比标准值小的索引值
+		if(a1&gt;=a2)break;
+		int temp1=A[a1];      //交换值
+		A[a1]=A[a2];
+		A[a2]=temp1;		
+	}
 
-&lt;h3&gt;What is Jekyll?&lt;/h3&gt;
+	if(A[a1]&gt;=A[right])  //将标准值重新交换回到合适位置
+	{
+	    temp=A[a1];
+	    A[a1]=A[right];
+	    A[right]=temp;
+	}
 
-&lt;p&gt;Jekyll is a parsing engine bundled as a ruby gem used to build static websites from
-dynamic components such as templates, partials, liquid code, markdown, etc. Jekyll is known as &quot;a simple, blog aware, static site generator&quot;.&lt;/p&gt;
+	return a2;
+}
 
-&lt;h3&gt;Examples&lt;/h3&gt;
-
-&lt;p&gt;This website is created with Jekyll. &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Sites&quot;&gt;Other Jekyll websites&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3&gt;What does Jekyll Do?&lt;/h3&gt;
-
-&lt;p&gt;Jekyll is a ruby gem you install on your local system.
-Once there you can call &lt;code&gt;jekyll --server&lt;/code&gt; on a directory and provided that directory
-is setup in a way jekyll expects, it will do magic stuff like parse markdown/textile files,
-compute categories, tags, permalinks, and construct your pages from layout templates and partials.&lt;/p&gt;
-
-&lt;p&gt;Once parsed, Jekyll stores the result in a self-contained static &lt;code&gt;_site&lt;/code&gt; folder.
-The intention here is that you can serve all contents in this folder statically from a plain static web-server.&lt;/p&gt;
-
-&lt;p&gt;You can think of Jekyll as a normalish dynamic blog but rather than parsing content, templates, and tags
-on each request, Jekyll does this once &lt;em&gt;beforehand&lt;/em&gt; and caches the &lt;em&gt;entire website&lt;/em&gt; in a folder for serving statically.&lt;/p&gt;
-
-&lt;h3&gt;Jekyll is Not Blogging Software&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Jekyll is a parsing engine.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Jekyll does not come with any content nor does it have any templates or design elements.
-This is a common source of confusion when getting started.
-Jekyll does not come with anything you actually use or see on your website - you have to make it.&lt;/p&gt;
-
-&lt;h3&gt;Why Should I Care?&lt;/h3&gt;
-
-&lt;p&gt;Jekyll is very minimalistic and very efficient.
-The most important thing to realize about Jekyll is that it creates a static representation of your website requiring only a static web-server.
-Traditional dynamic blogs like Wordpress require a database and server-side code.
-Heavily trafficked dynamic blogs must employ a caching layer that ultimately performs the same job Jekyll sets out to do; serve static content.&lt;/p&gt;
-
-&lt;p&gt;Therefore if you like to keep things simple and you prefer the command-line over an admin panel UI then give Jekyll a try.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Developers like Jekyll because we can write content like we write code:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ability to write content in markdown or textile in your favorite text-editor.&lt;/li&gt;
-&lt;li&gt;Ability to write and preview your content via localhost.&lt;/li&gt;
-&lt;li&gt;No internet connection required.&lt;/li&gt;
-&lt;li&gt;Ability to publish via git.&lt;/li&gt;
-&lt;li&gt;Ability to host your blog on a static web-server.&lt;/li&gt;
-&lt;li&gt;Ability to host freely on GitHub Pages.&lt;/li&gt;
-&lt;li&gt;No database required.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h1&gt;How Jekyll Works&lt;/h1&gt;
-
-&lt;p&gt;The following is a complete but concise outline of exactly how Jekyll works.&lt;/p&gt;
-
-&lt;p&gt;Be aware that core concepts are introduced in rapid succession without code examples.
-This information is not intended to specifically teach you how to do anything, rather it
-is intended to give you the &lt;em&gt;full picture&lt;/em&gt; relative to what is going on in Jekyll-world.&lt;/p&gt;
-
-&lt;p&gt;Learning these core concepts should help you avoid common frustrations and ultimately
-help you better understand the code examples contained throughout Jekyll-Bootstrap.&lt;/p&gt;
-
-&lt;h2&gt;Initial Setup&lt;/h2&gt;
-
-&lt;p&gt;After &lt;a href=&quot;/index.html#start-now&quot;&gt;installing jekyll&lt;/a&gt; you'll need to format your website directory in a way jekyll expects.
-Jekyll-bootstrap conveniently provides the base directory format.&lt;/p&gt;
-
-&lt;h3&gt;The Jekyll Application Base Format&lt;/h3&gt;
-
-&lt;p&gt;Jekyll expects your website directory to be laid out like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.
-|-- _config.yml
-|-- _includes
-|-- _layouts
-|   |-- default.html
-|   |-- post.html
-|-- _posts
-|   |-- 2011-10-25-open-source-is-good.markdown
-|   |-- 2011-04-26-hello-world.markdown
-|-- _site
-|-- index.html
-|-- assets
-    |-- css
-        |-- style.css
-    |-- javascripts
+void QuickSort(int A[],int left,int right)
+{
+	if(left&lt;right)
+	{
+		int pi=partition(A,left,right);
+		if(left&lt;pi)QuickSort(A,left,pi);  //左递归排序
+		if(pi+1&lt;right)QuickSort(A,pi+1,right);//有递归排序
+	}
+}
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;_config.yml&lt;/strong&gt;&lt;br/&gt;
-  Stores configuration data.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;_includes&lt;/strong&gt;&lt;br/&gt;
-  This folder is for partial views.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;_layouts&lt;/strong&gt; &lt;br/&gt;
-  This folder is for the main templates your content will be inserted into.
-  You can have different layouts for different pages or page sections.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;_posts&lt;/strong&gt;&lt;br/&gt;
-  This folder contains your dynamic content/posts.
-  the naming format is required to be &lt;code&gt;@YEAR-MONTH-DATE-title.MARKUP@&lt;/code&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;_site&lt;/strong&gt;&lt;br/&gt;
-  This is where the generated site will be placed once Jekyll is done transforming it.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;assets&lt;/strong&gt;&lt;br/&gt;
-  This folder is not part of the standard jekyll structure.
-  The assets folder represents &lt;em&gt;any generic&lt;/em&gt; folder you happen to create in your root directory.
-  Directories and files not properly formatted for jekyll will be left untouched for you to serve normally.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;(read more: &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Usage&quot;&gt;https://github.com/mojombo/jekyll/wiki/Usage&lt;/a&gt;)&lt;/p&gt;
-
-&lt;h3&gt;Jekyll Configuration&lt;/h3&gt;
-
-&lt;p&gt;Jekyll supports various configuration options that are fully outlined here:
-&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Configuration&quot;&gt;https://github.com/mojombo/jekyll/wiki/Configuration&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Content in Jekyll&lt;/h2&gt;
-
-&lt;p&gt;Content in Jekyll is either a post or a page.
-These content &quot;objects&quot; get inserted into one or more templates to build the final output for its respective static-page.&lt;/p&gt;
-
-&lt;h3&gt;Posts and Pages&lt;/h3&gt;
-
-&lt;p&gt;Both posts and pages should be written in markdown, textile, or HTML and may also contain Liquid templating syntax.
-Both posts and pages can have meta-data assigned on a per-page basis such as title, url path, as well as arbitrary custom meta-data.&lt;/p&gt;
-
-&lt;h3&gt;Working With Posts&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Creating a Post&lt;/strong&gt; &lt;br/&gt;
-Posts are created by properly formatting a file and placing it the &lt;code&gt;_posts&lt;/code&gt; folder.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
-A post must have a valid filename in the form &lt;code&gt;YEAR-MONTH-DATE-title.MARKUP&lt;/code&gt; and be placed in the &lt;code&gt;_posts&lt;/code&gt; directory.
-If the data format is invalid Jekyll will not recognize the file as a post. The date and title are automatically parsed from the filename of the post file.
-Additionally, each file must have &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;YAML Front-Matter&lt;/a&gt; prepended to its content.
-YAML Front-Matter is a valid YAML syntax specifying meta-data for the given file.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Order&lt;/strong&gt;&lt;br/&gt;
-Ordering is an important part of Jekyll but it is hard to specify a custom ordering strategy.
-Only reverse chronological and chronological ordering is supported in Jekyll.&lt;/p&gt;
-
-&lt;p&gt;Since the date is hard-coded into the filename format, to change the order, you must change the dates in the filenames.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Tags&lt;/strong&gt; &lt;br/&gt;
-Posts can have tags associated with them as part of their meta-data.
-Tags may be placed on posts by providing them in the post's YAML front matter.
-You have access to the post-specific tags in the templates. These tags also get added to the sitewide collection.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Categories&lt;/strong&gt; &lt;br/&gt;
-Posts may be categorized by providing one or more categories in the YAML front matter.
-Categories offer more significance over tags in that they can be reflected in the URL path to the given post.
-Note categories in Jekyll work in a specific way.
-If you define more than one category you are defining a category hierarchy &quot;set&quot;.
-Example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;---
-title :  Hello World
-categories : [lessons, beginner]
----
+&lt;!-- more --&gt;
+&lt;p&gt;优化之源码二&lt;/P&gt;
+&lt;pre class=&quot;c++&quot; name=&quot;colorcode&quot;&gt;&lt;code&gt;
+void qs(int a[],int s,int e) 
+{
+	int x=a[s],l=s,r=e;
+	//以第一个数为参照做比较
+	if(l&gt;=r)return;
+	while(l&lt;r)
+	{
+		while(l&lt;r&amp;&amp;a[r]&gt;=x)
+			r--; //不小于分界值的留在右边，遇到小于的停止
+		a[l]=a[r];
+		while(l&lt;r&amp;&amp;a[l]&lt;x)l++;
+		//小于分界值的留在左边，遇到不小于的停止
+		a[r]=a[l];
+	}
+	a[r]=x;
+	qs(a,s,r-1);
+	qs(a,r+1,e);//递归 　
+} 
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;17 Apr 2011&lt;/p&gt;
 
-&lt;p&gt;This defines the category hierarchy &quot;lessons/beginner&quot;. Note this is &lt;em&gt;one category&lt;/em&gt; node in Jekyll.
-You won't find &quot;lessons&quot; and &quot;beginner&quot; as two separate categories unless you define them elsewhere as singular categories.&lt;/p&gt;
 
-&lt;h3&gt;Working With Pages&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Creating a Page&lt;/strong&gt;&lt;br/&gt;
-Pages are created by properly formatting a file and placing it anywhere in the root directory or subdirectories that do &lt;em&gt;not&lt;/em&gt; start with an underscore.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
-In order to register as a Jekyll page the file must contain &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;YAML Front-Matter&lt;/a&gt;.
-Registering a page means 1) that Jekyll will process the page and 2) that the page object will be available in the &lt;code&gt;site.pages&lt;/code&gt; array for inclusion into your templates.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Categories and Tags&lt;/strong&gt;&lt;br/&gt;
-Pages do not compute categories nor tags so defining them will have no effect.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Sub-Directories&lt;/strong&gt;&lt;br/&gt;
-If pages are defined in sub-directories, the path to the page will be reflected in the url.
-Example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.
-|-- people
-    |-- bob
-        |-- essay.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This page will be available at &lt;code&gt;http://yourdomain.com/people/bob/essay.html&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Recommended Pages&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;index.html&lt;/strong&gt;&lt;br/&gt;
-You will always want to define the root index.html page as this will display on your root URL.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;404.html&lt;/strong&gt;&lt;br/&gt;
-Create a root 404.html page and GitHub Pages will serve it as your 404 response.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;sitemap.html&lt;/strong&gt;&lt;br/&gt;
-Generating a sitemap is good practice for SEO.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;about.html&lt;/strong&gt;&lt;br/&gt;
-A nice about page is easy to do and gives the human perspective to your website.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h2&gt;Templates in Jekyll&lt;/h2&gt;
-
-&lt;p&gt;Templates are used to contain a page's or post's content.
-All templates have access to a global site object variable: &lt;code&gt;site&lt;/code&gt; as well as a page object variable: &lt;code&gt;page&lt;/code&gt;.
-The site variable holds all accessible content and metadata relative to the site.
-The page variable holds accessible data for the given page or post being rendered at that point.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Create a Template&lt;/strong&gt;&lt;br/&gt;
-Templates are created by properly formatting a file and placing it in the &lt;code&gt;_layouts&lt;/code&gt; directory.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Formatting&lt;/strong&gt;&lt;br/&gt;
-Templates should be coded in HTML and contain YAML Front Matter.
-All templates can contain Liquid code to work with your site's data.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Rending Page/Post Content in a Template&lt;/strong&gt;&lt;br/&gt;
-There is a special variable in all templates named : &lt;code&gt;content&lt;/code&gt;.
-The &lt;code&gt;content&lt;/code&gt; variable holds the page/post content including any sub-template content previously defined.
-Render the content variable wherever you want your main content to be injected into your template:&lt;/p&gt;
-
-&lt;p&gt;  &lt;pre&gt;&lt;code&gt;...
-&amp;lt;body&amp;gt;
-  &amp;lt;div id=&quot;sidebar&quot;&amp;gt; ... &amp;lt;/div&amp;gt;
-  &amp;lt;div id=&quot;main&quot;&amp;gt;
-    &amp;#123;{content}&amp;#125;
-  &amp;lt;/div&amp;gt;
-&amp;lt;/body&amp;gt;
-...&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
-
-&lt;h3&gt;Sub-Templates&lt;/h3&gt;
-
-&lt;p&gt;Sub-templates are exactly templates with the only difference being they
-define another &quot;root&quot; layout/template within their YAML Front Matter.
-This essentially means a template will render inside of another template.&lt;/p&gt;
-
-&lt;h3&gt;Includes&lt;/h3&gt;
-
-&lt;p&gt;In Jekyll you can define include files by placing them in the &lt;code&gt;_includes&lt;/code&gt; folder.
-Includes are NOT templates, rather they are just code snippets that get included into templates.
-In this way, you can treat the code inside includes as if it was native to the parent template.&lt;/p&gt;
-
-&lt;p&gt;Any valid template code may be used in includes.&lt;/p&gt;
-
-&lt;h2&gt;Using Liquid for Templating&lt;/h2&gt;
-
-&lt;p&gt;Templating is perhaps the most confusing and frustrating part of Jekyll.
-This is mainly due to the fact that Jekyll templates must use the Liquid Templating Language.&lt;/p&gt;
-
-&lt;h3&gt;What is Liquid?&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/Shopify/liquid&quot;&gt;Liquid&lt;/a&gt; is a secure templating language developed by &lt;a href=&quot;http://shopify.com&quot;&gt;Shopify&lt;/a&gt;.
-Liquid is designed for end-users to be able to execute logic within template files
-without imposing any security risk on the hosting server.&lt;/p&gt;
-
-&lt;p&gt;Jekyll uses Liquid to generate the post content within the final page layout structure and as the primary interface for working with
-your site and post/page data.&lt;/p&gt;
-
-&lt;h3&gt;Why Do We Have to Use Liquid?&lt;/h3&gt;
-
-&lt;p&gt;GitHub uses Jekyll to power &lt;a href=&quot;http://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;.
-GitHub cannot afford to run arbitrary code on their servers so they lock developers down via Liquid.&lt;/p&gt;
-
-&lt;h3&gt;Liquid is Not Programmer-Friendly.&lt;/h3&gt;
-
-&lt;p&gt;The short story is liquid is not real code and its not intended to execute real code.
-The point being you can't do jackshit in liquid that hasn't been allowed explicitly by the implementation.
-What's more you can only access data-structures that have been explicitly passed to the template.&lt;/p&gt;
-
-&lt;p&gt;In Jekyll's case it is not possible to alter what is passed to Liquid without hacking the gem or running custom plugins.
-Both of which cannot be supported by GitHub Pages.&lt;/p&gt;
-
-&lt;p&gt;As a programmer - this is very frustrating.&lt;/p&gt;
-
-&lt;p&gt;But rather than look a gift horse in the mouth we are going to
-suck it up and view it as an opportunity to work around limitations and adopt client-side solutions when possible.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Aside&lt;/strong&gt; &lt;br/&gt;
-My personal stance is to not invest time trying to hack liquid. It's really unnecessary
-&lt;em&gt;from a programmer's&lt;/em&gt; perspective. That is to say if you have the ability to run custom plugins (i.e. run arbitrary ruby code)
-you are better off sticking with ruby. Toward that end I've built &lt;a href=&quot;http://github.com/plusjade/mustache-with-jekyll&quot;&gt;Mustache-with-Jekyll&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Static Assets&lt;/h2&gt;
-
-&lt;p&gt;Static assets are any file in the root or non-underscored subfolders that are not pages.
-That is they have no valid YAML Front Matter and are thus not treated as Jekyll Pages.&lt;/p&gt;
-
-&lt;p&gt;Static assets should be used for images, css, and javascript files.&lt;/p&gt;
-
-&lt;h2&gt;How Jekyll Parses Files&lt;/h2&gt;
-
-&lt;p&gt;Remember Jekyll is a processing engine. There are two main types of parsing in Jekyll.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Content parsing.&lt;/strong&gt; &lt;br/&gt;
-  This is done with textile or markdown.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Template parsing.&lt;/strong&gt; &lt;br/&gt;
-This is done with the liquid templating language.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;And thus there are two main types of file formats needed for this parsing.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Post and Page files.&lt;/strong&gt;&lt;br/&gt;
-All content in Jekyll is either a post or a page so valid posts and pages are parsed with markdown or textile.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Template files.&lt;/strong&gt;  &lt;br/&gt;
-  These files go in &lt;code&gt;_layouts&lt;/code&gt; folder and contain your blogs &lt;strong&gt;templates&lt;/strong&gt;. They should be made in HTML with the help of Liquid syntax.
-  Since include files are simply injected into templates they are essentially parsed as if they were native to the template.&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;p&gt;&lt;strong&gt;Arbitrary files and folders.&lt;/strong&gt; &lt;br/&gt;
-Files that &lt;em&gt;are not&lt;/em&gt; valid pages are treated as static content and pass through
-Jekyll untouched and reside on your blog in the exact structure and format they originally existed in.&lt;/p&gt;
-
-&lt;h3&gt;Formatting Files for Parsing.&lt;/h3&gt;
-
-&lt;p&gt;We've outlined the need for valid formatting using &lt;strong&gt;YAML Front Matter&lt;/strong&gt;.
-Templates, posts, and pages all need to provide valid YAML Front Matter even if the Matter is empty.
-This is the only way Jekyll knows you want the file processed.&lt;/p&gt;
-
-&lt;p&gt;YAML Front Matter must be prepended to the top of template/post/page files:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;---
-layout: post
-category : pages
-tags : [how-to, jekyll]
----
-
-... contents ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Three hyphens on a new line start the Front-Matter block and three hyphens on a new line end the block.
-The data inside the block must be valid YAML.&lt;/p&gt;
-
-&lt;p&gt;Configuration parameters for YAML Front-Matter is outlined here:
-&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/YAML-Front-Matter&quot;&gt;A comprehensive explanation of YAML Front Matter&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4&gt;Defining Layouts for Posts and Templates Parsing.&lt;/h4&gt;
-
-&lt;p&gt;The &lt;code&gt;layout&lt;/code&gt; parameter in the YAML Front Matter defines the template file for which the given post or template should be injected into.
-If a template file specifies its own layout, it is effectively being used as a &lt;code&gt;sub-template.&lt;/code&gt;
-That is to say loading a post file into a template file that refers to another template file with work in the way you'd expect; as a nested sub-template.&lt;/p&gt;
-
-&lt;h2&gt;How Jekyll Generates the Final Static Files.&lt;/h2&gt;
-
-&lt;p&gt;Ultimately, Jekyll's job is to generate a static representation of your website.
-The following is an outline of how that's done:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll collects data.&lt;/strong&gt; &lt;br/&gt;
-Jekyll scans the posts directory and collects all posts files as post objects. It then scans the layout assets and collects those and finally scans other directories in search of pages.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll computes data.&lt;/strong&gt; &lt;br/&gt;
-Jekyll takes these objects, computes metadata (permalinks, tags, categories, titles, dates) from them and constructs one
-big &lt;code&gt;site&lt;/code&gt; object that holds all the posts, pages, layouts, and respective metadata.
-At this stage your site is one big computed ruby object.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll liquifies posts and templates.&lt;/strong&gt;&lt;br/&gt;
-Next jekyll loops through each post file and converts (through markdown or textile) and &lt;strong&gt;liquifies&lt;/strong&gt; the post inside of its respective layout(s).
-Once the post is parsed and liquified inside the the proper layout structure, the layout itself is &quot;liquified&quot;. &lt;br/&gt;
- &lt;strong&gt;Liquification&lt;/strong&gt; is defined as follows: Jekyll initiates a Liquid template, and passes a simpler hash representation of the ruby site object as well as a simpler
-hash representation of the ruby post object. These simplified data structures are what you have access to in the templates.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jekyll generates output.&lt;/strong&gt; &lt;br/&gt;
- Finally the liquid templates are &quot;rendered&quot;, thereby processing any liquid syntax provided in the templates
- and saving the final, static representation of the file.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-
-&lt;p&gt;&lt;strong&gt;Notes.&lt;/strong&gt;&lt;br/&gt;
-Because Jekyll computes the entire site in one fell swoop, each template is given access to
-a global &lt;code&gt;site&lt;/code&gt; hash that contains useful data. It is this data that you'll iterate through and format
-using the Liquid tags and filters in order to render it onto a given page.&lt;/p&gt;
-
-&lt;p&gt;Remember, in Jekyll you are an end-user. Your API has only two components:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;The manner in which you setup your directory.&lt;/li&gt;
-&lt;li&gt;The liquid syntax and variables passed into the liquid templates.&lt;/li&gt;
-&lt;/ol&gt;
-
-
-&lt;p&gt;All the data objects available to you in the templates via Liquid are outlined in the &lt;strong&gt;API Section&lt;/strong&gt; of Jekyll-Bootstrap.
-You can also read the original documentation here: &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Template-Data&quot;&gt;https://github.com/mojombo/jekyll/wiki/Template-Data&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I hope this paints a clearer picture of what Jekyll is doing and why it works the way it does.
-As noted, our main programming constraint is the fact that our API is limited to what is accessible via Liquid and Liquid only.&lt;/p&gt;
-
-&lt;p&gt;Jekyll-bootstrap is intended to provide helper methods and strategies aimed at making it more intuitive and easier to work with Jekyll =)&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Thank you&lt;/strong&gt; for reading this far.&lt;/p&gt;
-
-&lt;h2&gt;Next Steps&lt;/h2&gt;
-
-&lt;p&gt;Please take a look at &lt;a href=&quot;&quot;&gt;&lt;/a&gt;
-or jump right into &lt;a href=&quot;&quot;&gt;Usage&lt;/a&gt; if you'd like.&lt;/p&gt;
 </description>
-                <link>http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction</link>
-                <guid>http://moxiaomomo.github.io/blue_sky/lessons/2011/12/29/jekyll-introduction</guid>
-                <pubDate>2011-12-29T00:00:00+08:00</pubDate>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2011/04/17/[C++]pku_quicksort</guid>
+                <pubDate>2011-04-17T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【C++】pku 1579_简单动态规划</title>
+                <description>&lt;p&gt;原题：
+Description&lt;br&gt;
+&lt;br&gt;
+We all love recursion! Don&#39;t we? &lt;br&gt;
+&lt;br&gt;
+Consider a three-parameter recursive function w(a, b, c): &lt;br&gt;
+&lt;br&gt;
+if a &lt;= 0 or b &lt;= 0 or c &lt;= 0, then w(a, b, c) returns: &lt;br&gt;
+1 &lt;br&gt;
+&lt;br&gt;
+if a &gt; 20 or b &gt; 20 or c &gt; 20, then w(a, b, c) returns: &lt;br&gt;
+w(20, 20, 20) &lt;br&gt;
+&lt;!-- more --&gt;
+&lt;br&gt;
+if a &lt; b and b &lt; c, then w(a, b, c) returns: &lt;br&gt;
+w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c) &lt;br&gt;
+&lt;br&gt;
+otherwise it returns: &lt;br&gt;
+w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1)&lt;br&gt; 
+&lt;br&gt;
+This is an easy function to implement. The problem is, if implemented directly, for moderate values of a, b and c (for example, a = 15, b = 15, c = 15), the program takes hours to run because of the massive recursion. &lt;br&gt;
+Input&lt;br&gt;
+&lt;br&gt;
+The input for your program will be a series of integer triples, one per line, until the end-of-file flag of -1 -1 -1. Using the above technique, you are to calculate w(a, b, c) efficiently and print the result.&lt;br&gt;
+Output&lt;br&gt;
+&lt;br&gt;
+Print the value for w(a,b,c) for each triple.&lt;br&gt;
+
+思路：题目所给的函数就是递归函数，要是按照函数本身写递归式，由于子问题的扩展速度太快扩展范围太大，结果肯定是TLE。&lt;br&gt;
+因此，为了减少重复计算，引入一个三维数组。每次从w(a,b,c)开始递推时，在子问题中只要s[x][y][z]有返回值就记录一次；如果在递归过程中，遇到s[x][y][z]已被赋值，则在此子问题中不再进行递归，直接返回值s[x][y][z].&lt;br&gt;
+小结：这道题是很地道的DP，由于子问题过多，可以将问题的结果保存起来，避免重复递归。问题虽然简单，但包含很经典的dp思想。&lt;br&gt;
+ 
+源码：&lt;/p&gt;
+&lt;pre class=&quot;C++&quot;&gt;&lt;code&gt;
+Source Code
+
+Problem: 1579  User: moxiaomomo 
+Memory: 200K  Time: 0MS 
+Language: C++  Result: Accepted 
+
+Source Code 
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int powers[21]={1,2,4,8,16,32,64,128,256,512,1024,
+                2048,4096,8192,16384,32768,65536,131072,
+				262144,524288,1048576};
+
+int s[21][21][21];
+
+int w(int a1,int b1,int c1)
+{
+	if(a1&lt;=0||b1&lt;=0||c1&lt;=0)
+		return 1;
+	if(a1&gt;20||b1&gt;20||c1&gt;20)
+		return 1048576;
+	if(a1&lt;=b1||a1&lt;=c1)
+		return powers[a1];
+    if(s[a1-1][b1][c1]==0)s[a1-1][b1][c1]=w(a1-1,b1,c1);
+	if(s[a1-1][b1-1][c1]==0)s[a1-1][b1-1][c1]=w(a1-1,b1-1,c1);
+	if(s[a1-1][b1][c1-1]==0)s[a1-1][b1][c1-1]=w(a1-1,b1,c1-1);
+	if(s[a1-1][b1-1][c1-1]==0)s[a1-1][b1-1][c1-1]=w(a1-1,b1-1,c1-1);
+	return s[a1-1][b1][c1]+s[a1-1][b1-1][c1]+
+		   s[a1-1][b1][c1-1]-s[a1-1][b1-1][c1-1];
+}
+
+int main()
+{  
+	int a,b,c,sum=1;
+	memset(s,0,sizeof(s));
+	s[20][20][20]=1048576;
+	while(scanf(&quot;%d%d%d&quot;,&amp;a,&amp;b,&amp;c)&amp;&amp;(a!=-1||b!=-1||c!=-1))
+	{
+		if(a&lt;0||b&lt;0||c&lt;0)sum=1;
+		else if(a&gt;20||b&gt;20||c&gt;20)sum=1048576;
+		else if(s[a][b][c]==0)sum=s[a][b][c]=w(a,b,c);
+		else sum=s[a][b][c];
+		printf(&quot;w(%d, %d, %d) = %d/n&quot;,a,b,c,sum);
+	}
+	return 0;
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;10 Nov 2010&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/10/[C++]pku_1579</guid>
+                <pubDate>2010-11-10T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【C++】pku 3750_STL容器的简单应用</title>
+                <description>&lt;p&gt;原题：
+Description
+有N个小孩围成一圈，给他们从1开始依次编号，现指定从第W个开始报数，报到第S个时，该小孩出列，然后从下一个小孩开始报数，仍是报到S个出列，如此重复下去，直到所有的小孩都出列（总人数不足S个时将循环报数），求小孩出列的顺序。
+Input
+第一行输入小孩的人数N（N&lt;=64） 
+接下来每行输入一个小孩的名字(人名不超过15个字符) 
+最后一行输入W,S (W &lt; N)，用逗号&quot;,&quot;间隔
+Output
+按人名输出小孩按顺序出列的顺序，每行输出一个人名
+
+思路：简单的容器vector+循环
+ 
+源码：&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;
+            Source Code
+
+Problem: 3750  User: moxiaomomo 
+Memory: 240K  Time: 16MS 
+Language: C++  Result: Accepted 
+
+
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;string&gt; v;
+string child_name[65];
+char sn[8];
+
+int main()
+{  
+	int n,w,s;
+	char c;
+	v.push_back(&quot;0&quot;);
+	cin&gt;&gt;n;
+	for(int i=1;i&lt;=n;++i)
+	{
+		cin&gt;&gt;child_name[i];
+		v.push_back(child_name[i]);
+	}
+	cin.ignore();
+	cin.getline(sn,7);
+	w=sn[0]-&#39;0&#39;;
+	s=sn[2]-&#39;0&#39;;
+
+	for(int i=1;i&lt;=n;++i)
+	{
+		int j,cn;
+		for(j=w-1,cn=1;cn&lt;=s;++cn)
+		{ //循环计数
+			if(j==v.size()-1)j=0;
+			++j;
+		}
+		cout&lt;&lt;v[j]&lt;&lt;endl;
+		v.erase(v.begin()+j);
+		if(j&gt;=v.size())w=1;
+		else w=j;
+	}
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;06 Nov 2010&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/06/[C++]pku_3750</guid>
+                <pubDate>2010-11-06T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【C++】pku 2362_Square 深搜+回溯</title>
+                <description>&lt;p&gt;搜索经典题，与pku acm_1011题类似。
+写得有点拗手，一开始都不知道跳到哪里去了，还得参考了很久以前做的1011题的源码，还得多多练习啊~
+ 
+源码：&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;
+Problem: 2362		User: moxiaomomo
+Memory: 240K		Time: 110MS
+Language: C++		Result: Accepted
+
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int n,m, s[25],sum;
+bool mark[25];
+bool cmp(int a, int b){
+    return a &gt; b;
+}
+bool DFS(int cur_len, int k, int cur_num){
+	if (cur_num == 4) return true;    //4条边全部还原成功，返回true
+	else if (cur_len == sum) return DFS(0, 0, cur_num + 1);      //已完成当前一条边，还原下一条边
+	else{
+		int  i;//pre,pre = 0, 
+		for (i = k; i &lt; m; i++)
+		{
+			if (mark[i] &amp;&amp; s[i] + cur_len &lt;= sum){//当前木棍可用 //&amp;&amp; s[i] != pre
+				       //pre = s[i];
+				mark[i] = false;     //改变使用状态
+				if (DFS(cur_len + s[i], i + 1, cur_num)) break;   //递归检测下一条木棍
+				mark[i] = true;       //如果使用当前的木棍并不能成功还原的话，还原此木棍状态
+				if (k == 0) return false; //回溯到第一根木棍仍然不能成功还原时，返回false
+			}
+		}
+		if (i == m) return false; //一直到无法还原边，循环结束, 则return false
+		else return true;
+	}
+}
+int main(){
+	cin&gt;&gt;n;
+	
+	while(--n&gt;=0)
+	{
+		cin&gt;&gt;m;
+		for (int i = sum = 0; i &lt; m; i++)
+		{
+			cin&gt;&gt;s[i];
+			sum += s[i];
+		}
+		if(sum%4!=0)
+		{printf(&quot;no/n&quot;);continue;}
+		sort(s, s + m, cmp);
+		sum /= 4;            
+		memset(mark, true, sizeof(mark));
+        if(DFS(0, 0, 0))printf(&quot;yes/n&quot;);
+		else printf(&quot;no/n&quot;);
+    }
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;01 Nov 2010&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2010/11/01/[C++]pku_2362</guid>
+                <pubDate>2010-11-01T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【C++】pku 2182_线段树简单应用</title>
+                <description>&lt;p&gt;题解：题目大意是说农场里有很多奶牛，每一头奶牛有唯一的标记号。在事先并不知道所有奶牛情况下，记录员从第一头牛开始记录数据。从第二头牛开始，每次都要计算有几头牛的标记号比当前这头牛的标记号要小，即有几头牛排在这头牛的前面。
+
+线段树的经典应用，当然不是唯一方法。举个例子说明一下题意~
+
+比如：n = 3
+序列1 2 3中每个元素前面大于它的元素个数分别为0 1 2
+输入为：0 1 1
+则从最后一个1开始向前看，1 2 3 中前面大于该元素的元素个数为1的为数字1，因此选择数字1，然后将1从序列中删除（1 2 3-&gt;2 3，0 1 2-&gt;0 1）。然后看倒数第二个1。依此类推。
+ 
+源码：&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;
+Problem: 2182		User: moxiaomomo
+Memory: 420K		Time: 16MS
+Language: C++		Result: Accepted
+
+#include&lt;iostream&gt;
+using namespace std;
+struct Node
+{
+    int l;
+    int r;
+    int cnt;//在[l,r]区间中的个数
+};
+Node T[16*1024];
+int a[8005];
+int ans[8005];
+int n;
+//建立线段树
+void build(int l,int r,int u)
+{
+    T[u].l=l;
+    T[u].r=r;
+    T[u].cnt=r-l+1;
+    if(l&lt;r)
+    {
+        build(l,(l+r)/2,2*u);
+        build((l+r)/2+1,r,2*u+1);
+    }
+}
+//每次找到一个点后，删除该点，并修改路径值
+void del(int c,int root) 
+{
+    if(T[root].l == T[root].r)
+    {
+        ans[n]=T[root].l;   //找到所求的点
+        T[root].cnt=0;  
+        return ;
+    }
+    if(c&lt;=T[2*root].cnt)
+        del(c,2*root);
+    else
+        del(c-T[2*root].cnt,2*root+1);
+    T[root].cnt--;       //删除一个点后，父节点中的数值和减1
+}
+int main()
+{
+    int N;
+    scanf(&quot;%d&quot;,&amp;N);
+    int i;
+    a[1]=0;
+    for(i=2;i&lt;=N;++i)
+        scanf(&quot;%d&quot;,&amp;a[i]);
+    build(1,N,1);
+    for(n=N;n&gt;0;--n)
+    {
+        del(a[n]+1,1);
+    }
+    for(i=1;i&lt;=N;++i)
+        printf(&quot;%d/n&quot;,ans[i]);
+    return 0;
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;31 Oct 2010&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/[C++]pku_2182</guid>
+                <pubDate>2010-10-31T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>【C++】pku 1273_Drainage Ditches 最大流问题</title>
+                <description>&lt;p&gt;经典网络流问题，使用Ford Fulkson算法。
+
+思路大概是：求排水沟网络中的最大排水量。
+                  从源点开始，每次寻找一条增广路径，更新一次，再重新找增广路径……直到没有为止。即每次寻找一条由源点到汇点的路径；
+                  把路径全部找完之后，剩余网络是最优网络，即能实现最大流。
+                  寻找增广路径时我使用了广搜，这是比较容易实现的过程。
+ 
+源码：&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;pre&gt;&lt;code&gt;
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+
+Source Code
+
+Problem: 1273		User: moxiaomomo
+Memory: 332K		Time: 0MS
+Language: C++		Result: Accepted
+Source Code
+#include&lt;iostream&gt;
+using namespace std;
+
+int N,M;
+
+int cost[205][205],r;
+int Min[205],pre[205];    
+bool visit[205];   //搜索标记
+
+int bfs()
+{
+	int q[205],start = 0,end = 0;
+	memset(visit,false,sizeof(visit));
+	q[0] = 1;         //以n点为搜索起点
+	visit[1]=true;
+	Min[1]=10000005;
+	while(start&lt;=end)     //搜索的最后一个点将是n+1
+	{
+		int t=q[start];      //下面进行点t的广搜
+		for(int i=1;i&lt;=M;++i)
+		{
+			if(!visit[i]&amp;&amp;cost[t][i]!=0)
+			{   //Min[t],最小值传递;如果前向节点记录的值比当前的边的值要大，则...
+				Min[i]=(Min[t]&lt;cost[t][i])? Min[t] : cost[t][i];
+				//Min[t]的作用是记录路径中权值最小的边
+				pre[i]=t;         //i的前向节点为t,在搜索过程中不断更新
+				if(i==M)
+				{return Min[M];}     //搜索完毕
+				visit[i]=true;
+				q[++end]=i;     //将i并入已搜索的集合
+			}
+		}
+		start++;      //进行下一个点的广搜
+	}
+	if (visit[M])      //如果最后一个点被搜索到，则说明存在增广路径
+       return Min[M];
+    else return -1 ;
+}
+
+void Ford_Fulkerson()
+{
+	int max=0,t,pre_t;
+	while((r = bfs()) != -1) //存在增广路径
+	{
+		max+=r; //最后max的值将是最大流的值
+		t=M;
+		while(t!=1)
+		{
+			pre_t=pre[t]; //找出前向点
+			cost[pre_t][t]-=r;    //前向路径值减一
+			cost[t][pre_t]+=r;    //后向路径值加一
+			t=pre_t;      //更新前向点
+		}
+	}
+	printf(&quot;%d/n&quot;,max);
+}
+
+int main()
+{
+	int k,x,y;
+	while(scanf (&quot;%d%d&quot;,&amp;N,&amp;M) != EOF)
+	{
+		memset(cost,0,sizeof(cost));
+
+		for(int i=0;i&lt;N;++i)
+		{
+			scanf(&quot;%d%d%d&quot;,&amp;x,&amp;y,&amp;k);
+			cost[x][y]+=k;
+		}
+
+		Ford_Fulkerson();
+	}
+
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/P&gt;
+&lt;p&gt;31 Oct 2010&lt;/p&gt;
+
+
+</description>
+                <link>http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273</link>
+                <guid>http://moxiaomomo.github.com/blue_sky/algorithm/2010/10/31/[C++]pku_1273</guid>
+                <pubDate>2010-10-31T00:00:00+08:00</pubDate>
         </item>
 
 

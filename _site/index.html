@@ -1,66 +1,605 @@
+
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="梦想的天空 : chase my ideal forever" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>moxiaomomo Blog</title>
+    <meta name="author" content="mo_guang">
+    <meta name="copyright" content="© http://moxiamomo.github.com" />
+    <meta property="wb:webmaster" content="61eb31a6e636506d" />
+    <meta name="wumiiVerification" content="eec4ca3c-ccdb-4c0f-9fe3-4499d87649a3" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    <title>Blue sky</title>
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+	<!-- Update these with your own images
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Handlee">
+    <script src="/assets/themes/twitter/js/jquery.js"></script>
+    <script src="/assets/themes/twitter/js/main.js"></script>
   </head>
 
-  <body>
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/moxiaomomo/blue_sky">访问GitHub</a>
+  <body data-spy="scroll" data-target=".navbar" data-offset="100" background="/blue_sky/images/bg.jpg">
 
-          <h1 id="project_title">Blue sky</h1>
-          <h2 id="project_tagline">python,C++,mysql</h2>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">moxiaomomo Blog</a>
+          <div class="nav-collapse">
+	    <ul class="nav">
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/moxiaomomo/blue_sky/archive/gh-pages.zip">Download this project as a .zip file</a>
-              <!--<a class="tar_download_link" href="https://github.com/moxiaomomo/blue_sky/tarball/master">Download this project as a tar.gz file</a> -->
-            </section>
-        </header>
+
+              <li><a href="/about.html">About</a></li>
+              <li><a href="/archive.html">Archive</a></li>
+              <li><a href="/sitemap.xml">Sitemap</a></li>
+              <li><a href="/tags.html">Tags</a></li>
+	    </ul>
+            <ul class="nav pull-right" data-subscription="rss">
+	 	 <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+	    </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section class="inner">
+    <div class="container">     
+        <div class="content">
+            
+
+
+<div class="row">
+  <div class="span12">
+    
+
+<div class="row">
+  <div class="span9">
+  
+  
+  <section id="20130924terris">
+    <article>
+      <header>
+      <h2><a href="/2013/09/24/terris">【python】pygame实现简单的俄罗斯方块</a></h2>
+      <div class="info">
+		Categories：
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2013-09-24">2013-09-24</time>
+		<a href='/2013/09/24/terris#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>shapes.py定义了方块类型, common.py定义了一些常量，及地图相关数组等</p>
+<p>common.py</p>
+<pre><code>
+#!/usr/bin/env python2.7
+#-*- encoding:utf-8 -*-
+
+# 初始化地图，并为活动空间外墙壁赋值
+def init_map(max_x, max_y, wall_widith, wall_height):  
+    maps = [[0 for col in range(max_x)]for cell in range(max_y)]  
+    for y in range(max_y):  
+        for x in range(max_x):  
+            if x < wall_widith or x > max_x - wall_widith - 1 or y > max_y - wall_height-1 or y < WALL_HEIGHT:  
+                    maps[y][x] = 2 
+    return maps
+
+# 获取新方块的起始位置  
+def get_start_point(shape):
+    h = len(shape)
+    return [CENTER_X, WALL_HEIGHT-h]
+
+SCREEN_SIZE = WIDTH, HEIGHT = [760, 560]
+BACKGROUND_COLOR = (33, 124, 33)  
+BLOCK_COLOR = (123, 22, 33)  
+BLOCK_EDGE_COLOR = (200, 233, 200)
+OUTER_WALL_COLOR = (51, 51, 51) 
+ 
+WALL_WIDTH = 11 
+WALL_HEIGHT = 3  
+#地图从(0,0)坐标开始画  
+MAP_BEGIN_POINT = [0, 0]  
+#地图的最大行数和列数  
+MAX_X, MAX_Y = 38, 28 
+#方块的边长  
+RECT_SIZE = [WIDTH/MAX_X, HEIGHT/MAX_Y]  
+#屏幕中央的x坐标  
+CENTER_X = int(MAX_X / 2) - 3
+#地图的数据  
+MAP_DATA = init_map(MAX_X, MAX_Y, WALL_WIDTH, WALL_HEIGHT)  
+# 展示下一方块的区域起始位置
+NEXT_BLOCK_START_POINT = [WALL_HEIGHT, WALL_HEIGHT]
+# 展示分数的区域起始位置
+SCORE_START_POINT = [MAX_X - WALL_WIDTH + 1, WALL_HEIGHT]
+#每秒的帧数  
+FPS = 40  
+#方块的下落速度  
+SPEED = 1  
+#方块自由体积下落的时间间隔  
+FALL_PER_SECONDS = 1  
+
+</code></pre>
+
+	    <h4><a href='/blue_sky//2013/09/24/terris' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="20130917%5Bpython%5Dsplit-file-by-row">
+    <article>
+      <header>
+      <h2><a href="/2013/09/17/%5Bpython%5Dsplit-file-by-row">【python】按行切分文件</a></h2>
+      <div class="info">
+		Categories：
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2013-09-17">2013-09-17</time>
+		<a href='/2013/09/17/%5Bpython%5Dsplit-file-by-row#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>python脚本利用shell命令来实现文本的操作， 这些命令大大减少了我们的代码量。
+比如按行切分文件并返回切分后得到的文件列表，可以利用内建的split命令进行切分。为了返回得到的文件列表名，可以先将文件切分到自建的子目录中，然后通过
+os.listdir获取所有文件，再将这些文件移到上一级目录(即函数参数指定的新目录)，删除自建子目录，最后返回该文件名列表。
+代码如下，如发现问题欢迎指正:</p>
+
+	    <h4><a href='/blue_sky//2013/09/17/%5Bpython%5Dsplit-file-by-row' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20110417%5BC%2B%2B%5Dpku_quicksort">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort">【C++】快速排序的一种实现</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2011-04-17">2011-04-17</time>
+		<a href='/algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>废话不多说，直接上代码。
+ 
+源码一：</p>
+<pre class="c++"><code>
+int partition(int A[],int left,int right)   //其中的一趟排序
+{
+	int p=(left+right)/2;
+	int temp=A[right];          //将选中的标准值放到数组末尾
+	A[right]=A[p];
+	A[p]=temp;
+
+	int a1=left,a2=right-1;
+	while(a1<a2)
+	{
+		while(A[a1]<A[right]){a1++;}   //左子数组寻找比标准值大的索引值
+		while(A[a2]>=A[right]&&a1<a2)a2--;  //右子数组寻找比标准值小的索引值
+		if(a1>=a2)break;
+		int temp1=A[a1];      //交换值
+		A[a1]=A[a2];
+		A[a2]=temp1;		
+	}
+
+	if(A[a1]>=A[right])  //将标准值重新交换回到合适位置
+	{
+	    temp=A[a1];
+	    A[a1]=A[right];
+	    A[right]=temp;
+	}
+
+	return a2;
+}
+
+void QuickSort(int A[],int left,int right)
+{
+	if(left<right)
+	{
+		int pi=partition(A,left,right);
+		if(left<pi)QuickSort(A,left,pi);  //左递归排序
+		if(pi+1<right)QuickSort(A,pi+1,right);//有递归排序
+	}
+}
+</code></pre>
+
+	    <h4><a href='/blue_sky//algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20101110%5BC%2B%2B%5Dpku_1579">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579">【C++】pku 1579_简单动态规划</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2010-11-10">2010-11-10</time>
+		<a href='/algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>原题：
+Description<br>
+<br>
+We all love recursion! Don't we? <br>
+<br>
+Consider a three-parameter recursive function w(a, b, c): <br>
+<br>
+if a <= 0 or b <= 0 or c <= 0, then w(a, b, c) returns: <br>
+1 <br>
+<br>
+if a > 20 or b > 20 or c > 20, then w(a, b, c) returns: <br>
+w(20, 20, 20) <br>
+
+	    <h4><a href='/blue_sky//algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20101106%5BC%2B%2B%5Dpku_3750">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750">【C++】pku 3750_STL容器的简单应用</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2010-11-06">2010-11-06</time>
+		<a href='/algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>原题：
+Description
+有N个小孩围成一圈，给他们从1开始依次编号，现指定从第W个开始报数，报到第S个时，该小孩出列，然后从下一个小孩开始报数，仍是报到S个出列，如此重复下去，直到所有的小孩都出列（总人数不足S个时将循环报数），求小孩出列的顺序。
+Input
+第一行输入小孩的人数N（N<=64） 
+接下来每行输入一个小孩的名字(人名不超过15个字符) 
+最后一行输入W,S (W < N)，用逗号","间隔
+Output
+按人名输出小孩按顺序出列的顺序，每行输出一个人名
+
+思路：简单的容器vector+循环
+ 
+源码：</p>
+
+	    <h4><a href='/blue_sky//algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20101101%5BC%2B%2B%5Dpku_2362">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362">【C++】pku 2362_Square 深搜+回溯</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2010-11-01">2010-11-01</time>
+		<a href='/algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>搜索经典题，与pku acm_1011题类似。
+写得有点拗手，一开始都不知道跳到哪里去了，还得参考了很久以前做的1011题的源码，还得多多练习啊~
+ 
+源码：</p>
+
+	    <h4><a href='/blue_sky//algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20101031%5BC%2B%2B%5Dpku_2182">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182">【C++】pku 2182_线段树简单应用</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2010-10-31">2010-10-31</time>
+		<a href='/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>题解：题目大意是说农场里有很多奶牛，每一头奶牛有唯一的标记号。在事先并不知道所有奶牛情况下，记录员从第一头牛开始记录数据。从第二头牛开始，每次都要计算有几头牛的标记号比当前这头牛的标记号要小，即有几头牛排在这头牛的前面。
+
+线段树的经典应用，当然不是唯一方法。举个例子说明一下题意~
+
+比如：n = 3
+序列1 2 3中每个元素前面大于它的元素个数分别为0 1 2
+输入为：0 1 1
+则从最后一个1开始向前看，1 2 3 中前面大于该元素的元素个数为1的为数字1，因此选择数字1，然后将1从序列中删除（1 2 3->2 3，0 1 2->0 1）。然后看倒数第二个1。依此类推。
+ 
+源码：</p>
+
+	    <h4><a href='/blue_sky//algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  
+  <section id="algorithm20101031%5BC%2B%2B%5Dpku_1273">
+    <article>
+      <header>
+      <h2><a href="/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273">【C++】pku 1273_Drainage Ditches 最大流问题</a></h2>
+      <div class="info">
+		Categories：
+			
+			<a href="/blue_sky/categories.html#algorithm-ref">algorithm</a>
+			
+			
+		|
+		Tags：
+			
+		|
+		Time：<time date="2010-10-31">2010-10-31</time>
+		<a href='/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273#comments' title='分享文章、查看评论' style="float:right;margin-right:.5em;">Comments</a>
+	</div>
+    </header>
+
+    <div class="content">
+	  
+	    <p>经典网络流问题，使用Ford Fulkson算法。
+
+思路大概是：求排水沟网络中的最大排水量。
+                  从源点开始，每次寻找一条增广路径，更新一次，再重新找增广路径……直到没有为止。即每次寻找一条由源点到汇点的路径；
+                  把路径全部找完之后，剩余网络是最优网络，即能实现最大流。
+                  寻找增广路径时我使用了广搜，这是比较容易实现的过程。
+ 
+源码：</p>
+
+	    <h4><a href='/blue_sky//algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273' title='Read more...'>Read more...</a></h4>
+	  
+   </div>
+    </article>
+  </section>
+  
+  <div class="pagination">
       <ul>
-      　　
-      　　　　<li>24 Sep 2013 <a href="/blue_sky/2013/09/24/terris">【python】pygame实现简单的俄罗斯方块</a></li>
-      　　
-      　　　　<li>17 Sep 2013 <a href="/blue_sky/2013/09/17/%5Bpython%5Dsplit-file-by-row">【python】按行切分文件</a></li>
-      　　
-      　　　　<li>29 Dec 2011 <a href="/blue_sky/lessons/2011/12/29/jekyll-introduction">Jekyll Introduction</a></li>
-      　　
+        <li><a href="/archive.html">Archive</a></li>
       </ul>
-      </session>
+  </div>
+  </div>
 
-      <section class="inner">
-      <h4>About me</h4>
-      <div>
-       目前主要从事移动互联网服务端数据维护工作，擅长python开发及mysql管理。<a href="/about.html">更多信息</a> 
-       <br/>
-       <br/>
-       <strong><font color="red"><a href="/atom.xml" target="_blank">订阅本站</a></font></strong>
-       <br/><br/>
-           联系博主：moxiaomomo@gmail.com
-       </div>
-       </section>
-    </div>
+  <aside class="span3">
+    <section>
+   	 <h2>About me</h2>
+	<div>
+   	 Software Engineer, linux lover.<a href="/blue_sky/about.html">更多信息</a> 
+	</div>
+    </section>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Blue sky maintained by <a href="https://github.com/moxiaomomo">moxiaomomo</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+    <section>
+	  
+	    <h2>Categories</h2>
+	    <ul id="category-list">
+	      
+	      
+
+
+  
+     
+    	<li><a href="/categories.html#algorithm-ref">
+    		algorithm <span>(6)</span>
+    	</a></li>
+    
+  
+
+
+
+	    </ul>
+	  
+    </section>
+
+    <section>
+    <h2>Recent Posts</h2>
+    <ul id="recent_posts">
+      <li class="post">
+        <a href="/2013/09/24/terris">【python】pygame实现简单的俄罗斯方块</a>
+      </li>
+      <li class="post">
+        <a href="/2013/09/17/%5Bpython%5Dsplit-file-by-row">【python】按行切分文件</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2011/04/17/%5BC%2B%2B%5Dpku_quicksort">【C++】快速排序的一种实现</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2010/11/10/%5BC%2B%2B%5Dpku_1579">【C++】pku 1579_简单动态规划</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2010/11/06/%5BC%2B%2B%5Dpku_3750">【C++】pku 3750_STL容器的简单应用</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2010/11/01/%5BC%2B%2B%5Dpku_2362">【C++】pku 2362_Square 深搜+回溯</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_2182">【C++】pku 2182_线段树简单应用</a>
+      </li>
+      <li class="post">
+        <a href="/algorithm/2010/10/31/%5BC%2B%2B%5Dpku_1273">【C++】pku 1273_Drainage Ditches 最大流问题</a>
+      </li>
+    </ul>
+    </section>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"moxiaomomo"};
+	(function() {
+	    var ds = document.createElement('script');
+	    ds.type = 'text/javascript';ds.async = true;
+	    ds.src = 'http://static.duoshuo.com/embed.js';
+	    ds.charset = 'UTF-8';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+	<section>
+		<h2>Recent Comments</h2>
+		<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="100"></ul>
+	</section>
+	<section>
+		<h2>Recent Vistors</h2>
+		 <ul class="ds-recent-visitors" data-num-items="18"></ul>
+	</section>
+    <section>
+    <h2>Links</h2>
+   	<ul>
+	<li>Java开发
+			<ul>                                
+				<li><a href="http://blog.javachen.com/" target="_blank">javachen blog</a></li>
+				<li><a href="http://blog.frankel.ch/" target="_blank">A Java geek</a></li>
+				<li><a href="http://xinwang.osdn.cn/" target="_blank">辛望的开发日志</a></li>
+				<li><a href="http://kohsuke.org/" target="_blank">Kohsuke Kawaguchi</a></li>
+				<li><a href="http://www.longtask.com/blog/" target="_blank">龙浩的blog</a>就职于阿里巴巴云计算</li>
+				<li><a href="http://jdkcn.com/" target="_blank">莫多泡泡</a>A Java programmeri</li>
+				<li><a href="http://hackfisher.info/" target="_blank">HackFisher</a></li>
+				<li><a href="http://bluedash.net/categories/%E7%BC%96%E7%A8%8B/spaces" target="_blank">蓝点</a></li>
+				<li><a href="http://javafans.info/" target="_blank">Java爱好者</a></li>
+				<li><a href="http://www.yankay.com/" target="_blank">我自然</a>颜开的博客</li>
+			</ul>
+		</li>
+		<li>前端开发
+			<ul>
+				<li><a href="http://panweizeng.com/" target="_blank">潘魏增</a>美团网前端工程师</li>
+				<li><a href="http://14px.com/" target="_blank">十四像素</a></li>
+			</ul>
+		</li>
+		<li>其他
+			<ul>
+				<li><a href="http://blog.boluotou.com/" target="_blank">圆木菠萝罐</a>一个大学学长</li>
+				<li><a href="http://blog.codingnow.com/" target="_blank">云风的BLOG</a></li>
+				<li><a href="http://www.yy42.net/blog/" target="_blank">程显峰</a></li>
+				<li><a href="http://coolshell.cn/" target="_blank">酷壳–CoolShell.cn</a></li>
+				<li><a href="http://www.coder4.com/" target="_blank">四号程序员</a></li>
+				<li><a href="http://timyang.net/" target="_blank">Tim[后端技术]</a></li>
+				<li><a href="http://www.agiledon.com/" target="_blank">捷道</a>Thoughtworks架构师</li>
+				<li><a href="http://log4d.com/" target="_blank">Log4D</a></li>
+
+				<li><a href="http://dev.ymeng.net/" target="_blank">Dev Notes</a></li>
+				<li><a href="http://www.dbanotes.net/" target="_blank">DBA Notes</a></li>		
+			</ul>
+		</li>
+                <li>我的其他博客
+			<ul>
+				<li><a href="http://blog.csdn.net/moxiaomomo/article/" target="_blank">莫广</a>moxiaomomo</li>
+			</ul>
+		</li>
+	</ul>
+  </section>
+  </aside>
+</div>
+
+  </div>
+</div>
+
+
+
+        <div id="comments" class="ds-thread" data-title="moxiaomomo Blog"></div>
+             <script type="text/javascript">
+                var duoshuoQuery = {short_name:"moxiaomomo"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] 
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+      </div>
+
+      <footer>
+        <p>&copy; mo_guang 2013 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> | <script language="javascript" type="text/javascript" src="http://js.users.51.la/16449946.js"></script>
+<noscript><a href="http://www.51.la/?16449946" target="_blank"><img alt="Statistic" src="http://img.users.51.la/16449946.asp" style="border:none" /></a></noscript>
+        </p>
       </footer>
-    </div>
-
+      <div id="toTop"><a href="#">▲</a><a href="#footer">▼</a></div>
+    </div> <!-- /container -->
+    
   </body>
 </html>
+

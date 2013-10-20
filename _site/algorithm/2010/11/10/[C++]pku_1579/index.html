@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>【C++】pku 1579_简单动态规划 - moxiaomomo Blog</title>
+    <meta name="author" content="mo_guang">
+    <meta name="copyright" content="© http://moxiamomo.github.com" />
+    <meta property="wb:webmaster" content="61eb31a6e636506d" />
+    <meta name="wumiiVerification" content="eec4ca3c-ccdb-4c0f-9fe3-4499d87649a3" />
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/favicon.ico">
+	<!-- Update these with your own images
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Handlee">
+    <script src="/assets/themes/twitter/js/jquery.js"></script>
+    <script src="/assets/themes/twitter/js/main.js"></script>
+  </head>
+
+  <body data-spy="scroll" data-target=".navbar" data-offset="100" background="/blue_sky/images/bg.jpg">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">moxiaomomo Blog</a>
+          <div class="nav-collapse">
+	    <ul class="nav">
+
+
+              <li><a href="/about.html">About</a></li>
+              <li><a href="/archive.html">Archive</a></li>
+              <li><a href="/sitemap.xml">Sitemap</a></li>
+              <li><a href="/tags.html">Tags</a></li>
+	    </ul>
+            <ul class="nav pull-right" data-subscription="rss">
+	 	 <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+	    </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">     
+        <div class="content">
+            <p>原题：
+Description<br>
+<br>
+We all love recursion! Don't we? <br>
+<br>
+Consider a three-parameter recursive function w(a, b, c): <br>
+<br>
+if a <= 0 or b <= 0 or c <= 0, then w(a, b, c) returns: <br>
+1 <br>
+<br>
+if a > 20 or b > 20 or c > 20, then w(a, b, c) returns: <br>
+w(20, 20, 20) <br>
+<!-- more -->
+<br>
+if a < b and b < c, then w(a, b, c) returns: <br>
+w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c) <br>
+<br>
+otherwise it returns: <br>
+w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1)<br> 
+<br>
+This is an easy function to implement. The problem is, if implemented directly, for moderate values of a, b and c (for example, a = 15, b = 15, c = 15), the program takes hours to run because of the massive recursion. <br>
+Input<br>
+<br>
+The input for your program will be a series of integer triples, one per line, until the end-of-file flag of -1 -1 -1. Using the above technique, you are to calculate w(a, b, c) efficiently and print the result.<br>
+Output<br>
+<br>
+Print the value for w(a,b,c) for each triple.<br>
+
+思路：题目所给的函数就是递归函数，要是按照函数本身写递归式，由于子问题的扩展速度太快扩展范围太大，结果肯定是TLE。<br>
+因此，为了减少重复计算，引入一个三维数组。每次从w(a,b,c)开始递推时，在子问题中只要s[x][y][z]有返回值就记录一次；如果在递归过程中，遇到s[x][y][z]已被赋值，则在此子问题中不再进行递归，直接返回值s[x][y][z].<br>
+小结：这道题是很地道的DP，由于子问题过多，可以将问题的结果保存起来，避免重复递归。问题虽然简单，但包含很经典的dp思想。<br>
+ 
+源码：</p>
+<pre class="C++"><code>
+Source Code
+
+Problem: 1579  User: moxiaomomo 
+Memory: 200K  Time: 0MS 
+Language: C++  Result: Accepted 
+
+Source Code 
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int powers[21]={1,2,4,8,16,32,64,128,256,512,1024,
+                2048,4096,8192,16384,32768,65536,131072,
+				262144,524288,1048576};
+
+int s[21][21][21];
+
+int w(int a1,int b1,int c1)
+{
+	if(a1<=0||b1<=0||c1<=0)
+		return 1;
+	if(a1>20||b1>20||c1>20)
+		return 1048576;
+	if(a1<=b1||a1<=c1)
+		return powers[a1];
+    if(s[a1-1][b1][c1]==0)s[a1-1][b1][c1]=w(a1-1,b1,c1);
+	if(s[a1-1][b1-1][c1]==0)s[a1-1][b1-1][c1]=w(a1-1,b1-1,c1);
+	if(s[a1-1][b1][c1-1]==0)s[a1-1][b1][c1-1]=w(a1-1,b1,c1-1);
+	if(s[a1-1][b1-1][c1-1]==0)s[a1-1][b1-1][c1-1]=w(a1-1,b1-1,c1-1);
+	return s[a1-1][b1][c1]+s[a1-1][b1-1][c1]+
+		   s[a1-1][b1][c1-1]-s[a1-1][b1-1][c1-1];
+}
+
+int main()
+{  
+	int a,b,c,sum=1;
+	memset(s,0,sizeof(s));
+	s[20][20][20]=1048576;
+	while(scanf("%d%d%d",&a,&b,&c)&&(a!=-1||b!=-1||c!=-1))
+	{
+		if(a<0||b<0||c<0)sum=1;
+		else if(a>20||b>20||c>20)sum=1048576;
+		else if(s[a][b][c]==0)sum=s[a][b][c]=w(a,b,c);
+		else sum=s[a][b][c];
+		printf("w(%d, %d, %d) = %d/n",a,b,c,sum);
+	}
+	return 0;
+}
+
+</code></pre>
+<p></P>
+<p>10 Nov 2010</p>
+
+
+
+
+        <div id="comments" class="ds-thread" data-title="【C++】pku 1579_简单动态规划 - moxiaomomo Blog"></div>
+             <script type="text/javascript">
+                var duoshuoQuery = {short_name:"moxiaomomo"};
+                (function() {
+                    var ds = document.createElement('script');
+                    ds.type = 'text/javascript';ds.async = true;
+                    ds.src = 'http://static.duoshuo.com/embed.js';
+                    ds.charset = 'UTF-8';
+                    (document.getElementsByTagName('head')[0] 
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+                })();
+            </script>
+      </div>
+
+      <footer>
+        <p>&copy; mo_guang 2013 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> | <script language="javascript" type="text/javascript" src="http://js.users.51.la/16449946.js"></script>
+<noscript><a href="http://www.51.la/?16449946" target="_blank"><img alt="Statistic" src="http://img.users.51.la/16449946.asp" style="border:none" /></a></noscript>
+        </p>
+      </footer>
+      <div id="toTop"><a href="#">▲</a><a href="#footer">▼</a></div>
+    </div> <!-- /container -->
+    
+  </body>
+</html>
+

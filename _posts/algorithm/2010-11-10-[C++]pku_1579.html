@@ -1,42 +1,43 @@
 ---
 layout: default
 title: 【C++】pku 1579_简单动态规划
+category: algorithm
 ---
 
 <p>原题：
-Description
+Description<br>
+<br>
+We all love recursion! Don't we? <br>
+<br>
+Consider a three-parameter recursive function w(a, b, c): <br>
+<br>
+if a <= 0 or b <= 0 or c <= 0, then w(a, b, c) returns: <br>
+1 <br>
+<br>
+if a > 20 or b > 20 or c > 20, then w(a, b, c) returns: <br>
+w(20, 20, 20) <br>
+<!-- more -->
+<br>
+if a < b and b < c, then w(a, b, c) returns: <br>
+w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c) <br>
+<br>
+otherwise it returns: <br>
+w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1)<br> 
+<br>
+This is an easy function to implement. The problem is, if implemented directly, for moderate values of a, b and c (for example, a = 15, b = 15, c = 15), the program takes hours to run because of the massive recursion. <br>
+Input<br>
+<br>
+The input for your program will be a series of integer triples, one per line, until the end-of-file flag of -1 -1 -1. Using the above technique, you are to calculate w(a, b, c) efficiently and print the result.<br>
+Output<br>
+<br>
+Print the value for w(a,b,c) for each triple.<br>
 
-We all love recursion! Don't we? 
-
-Consider a three-parameter recursive function w(a, b, c): 
-
-if a <= 0 or b <= 0 or c <= 0, then w(a, b, c) returns: 
-1 
-
-if a > 20 or b > 20 or c > 20, then w(a, b, c) returns: 
-w(20, 20, 20) 
-
-if a < b and b < c, then w(a, b, c) returns: 
-w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c) 
-
-otherwise it returns: 
-w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1) 
-
-This is an easy function to implement. The problem is, if implemented directly, for moderate values of a, b and c (for example, a = 15, b = 15, c = 15), the program takes hours to run because of the massive recursion. 
-Input
-
-The input for your program will be a series of integer triples, one per line, until the end-of-file flag of -1 -1 -1. Using the above technique, you are to calculate w(a, b, c) efficiently and print the result.
-Output
-
-Print the value for w(a,b,c) for each triple.
-
-思路：题目所给的函数就是递归函数，要是按照函数本身写递归式，由于子问题的扩展速度太快扩展范围太大，结果肯定是TLE。
-因此，为了减少重复计算，引入一个三维数组。每次从w(a,b,c)开始递推时，在子问题中只要s[x][y][z]有返回值就记录一次；如果在递归过程中，遇到s[x][y][z]已被赋值，则在此子问题中不再进行递归，直接返回值s[x][y][z].
-小结：这道题是很地道的DP，由于子问题过多，可以将问题的结果保存起来，避免重复递归。问题虽然简单，但包含很经典的dp思想。
+思路：题目所给的函数就是递归函数，要是按照函数本身写递归式，由于子问题的扩展速度太快扩展范围太大，结果肯定是TLE。<br>
+因此，为了减少重复计算，引入一个三维数组。每次从w(a,b,c)开始递推时，在子问题中只要s[x][y][z]有返回值就记录一次；如果在递归过程中，遇到s[x][y][z]已被赋值，则在此子问题中不再进行递归，直接返回值s[x][y][z].<br>
+小结：这道题是很地道的DP，由于子问题过多，可以将问题的结果保存起来，避免重复递归。问题虽然简单，但包含很经典的dp思想。<br>
  
 源码：</p>
-<!-- more -->
-<pre><code>
+<pre class="C++"><code>
 Source Code
 
 Problem: 1579  User: moxiaomomo 

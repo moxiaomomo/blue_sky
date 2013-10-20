@@ -52,12 +52,11 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container">     
+        <div class="content">
+            {{ content }}
 
-      <div class="content">
-        {{ content }}
-
-      <div id="comments" class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
+        <div id="comments" class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
              <script type="text/javascript">
                 var duoshuoQuery = {short_name:"moxiaomomo"};
                 (function() {
