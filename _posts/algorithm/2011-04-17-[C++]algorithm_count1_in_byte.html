@@ -1,0 +1,55 @@
+---
+layout: default
+title: 【C++】求一个unsigned int 数的二进制表示中有多少个1？
+keywords: C++, algorithm
+category: algorithm
+---
+
+<p>需求: 统计非负整数的二进制位中包含1的个数。</p>
+<p>第一种方法，使用普通循环:</p>
+<!-- more -->
+<pre><code>
+unsigned int GetBitNum1(unsigned int nValue)
+{
+	const unsigned int nNumOfBitInByte = 8;
+	unsigned int tempMask = 1;
+	unsigned int n = 0;
+	for(unsigned int i = 0 ; i < sizeof(nValue) * nNumOfBitInByte ; i++)
+	{
+		(0 < (nValue & tempMask)) ? n++ : 0;
+		tempMask<<=1;
+	}
+	return n;
+}
+</code></pre>
+<p>或者可以这样:</P>
+<pre><code>
+unsigned int GetBitNum2(unsigned int nValue)
+{
+	const unsigned int nNumOfBitInByte = 8;
+	unsigned int tempMask = 1;
+	unsigned int n = 0;
+	for(unsigned int i = 0 ; i < sizeof(nValue) * nNumOfBitInByte ; i++)
+	{
+		(0 < (nValue & tempMask)) ? n++ : 0;
+		nValue>>=1;
+	}
+	return n;
+}
+</code></pre>
+<p>更加巧妙的方法:</P>
+<pre><code>
+unsigned int GetBitNum4(unsigned int nValue)
+{
+	nValue = ((0xaaaaaaaa & nValue)>>1) + (0x55555555 & nValue);
+	nValue = ((0xcccccccc & nValue)>>2) + (0x33333333 & nValue);
+	nValue = ((0xf0f0f0f0 & nValue)>>4) + (0x0f0f0f0f & nValue);
+	nValue = ((0xff00ff00 & nValue)>>8) + (0x00ff00ff & nValue);
+	nValue = ((0xffff0000 & nValue)>>16) + (0x0000ffff & nValue);
+
+	return nValue;
+}
+</code></pre>
+<p>{{>page.date | date_to_string }}</p>
+
+

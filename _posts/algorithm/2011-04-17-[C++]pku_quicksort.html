@@ -5,10 +5,9 @@ keywords: C++, algorithm, quicksort
 category: algorithm
 ---
 
-<p>废话不多说，直接上代码。
- 
-源码一：</p>
-<pre><code class="c++">
+<p>废话不多说，直接上代码。源码一：</p>
+<!-- more -->
+<pre><code>
 int partition(int A[],int left,int right)   //其中的一趟排序
 {
 	int p=(left+right)/2;
@@ -47,9 +46,8 @@ void QuickSort(int A[],int left,int right)
 	}
 }
 </code></pre>
-<!-- more -->
 <p>优化之源码二</P>
-<pre><code class="c++">
+<pre><code>
 void qs(int a[],int s,int e) 
 {
 	int x=a[s],l=s,r=e;
