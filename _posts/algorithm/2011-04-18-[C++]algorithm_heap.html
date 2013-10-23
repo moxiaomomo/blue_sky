@@ -1,0 +1,56 @@
+---
+layout: default
+title: 【C++】堆排序算法的C++实现
+keywords: C++, algorithm
+category: algorithm
+---
+
+<p>堆排序：
+n*log(n)的时间复杂度， 非稳定排序，原地排序。
+它的思想是利用的堆这种数据结构，堆可以看成一个完全二叉树，所以在排序中比较的次数可以做到很少。
+加上他也是原地排序，不需要申请额外的空间，效率也不错。
+堆的重要特点是每一次循环都会建立新的最大或最小堆。</p>
+<p>C++源码:</p>
+<!-- more -->
+<pre><code>
+void Heapfy(int A[],int idx,int max)      //建立最大堆
+{
+	int left=idx*2+1;
+	int right=left+1;
+	int largest=idx;
+
+	if(left<max&&A[left]>A[idx]){largest=left;}
+	if(right<max&&A[largest]<A[right]){largest=right;}
+
+	if(largest!=idx)
+	{
+		int temp=A[largest];   //较大的节点值将交换到其所在节点的父节点
+		A[largest]=A[idx];
+		A[idx]=temp;
+
+		Heapfy(A,largest,max); //递归遍历
+	}
+}
+
+void buildHeap(int A[],int ll)
+{
+	int len=ll;
+
+	for(int i=len/2-1;i>=0;--i)
+	{
+		Heapfy(A,i,len);     //建立最大堆，将堆中最大的值交换到根节点
+	}
+
+	for(int i=len-1;i>=1;--i)
+	{
+		int temp=A[0];   //将当前堆的根节点交换到堆尾的指定位置
+		A[0]=A[i];
+		A[i]=temp;
+
+		Heapfy(A,0,i);  //建立下一次的最大堆
+	}
+}
+</code></pre>
+<p>{{>page.date | date_to_string }}</p>
+
+
