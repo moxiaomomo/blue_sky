@@ -1,0 +1,41 @@
+---
+layout: default
+title: 【C++】求二叉树的节点总数与高度
+keywords: C++, algorithm
+category: algorithm
+---
+
+<p>可采用经典的递归遍历方法</p>
+<p>C++源码:</p>
+<!-- more -->
+<pre><code>
+struct BTree
+{
+	int data;
+
+	BTree* left;
+	BTree* right;
+};
+
+int nodes(BTree* t)//获取节点数
+{
+	if(t==NULL)return 0; //当前节点为NULL
+	else if(t->left==NULL&&t->right==NULL)  //当前节点为叶子节点
+	{return 1;}
+	else  {return nodes(t->left)+nodes(t->right)+1;}  //递归
+}
+
+int depth(BTree* t)//获取树的高度
+{
+	if(t==NULL)return 0;
+	else
+	{
+		int dleft=depth(t->left);    //获取左子树高度
+		int dright=depth(t->right);     //获取有字数高度
+
+		return (dleft>dright?dleft+1:dright+1);
+	}
+}</code></pre>
+<p>{{>page.date | date_to_string }}</p>
+
+
