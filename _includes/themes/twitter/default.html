@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="pragma" content="no-cache" />
-    <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>{% if page.keywords %}
+    <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+	{% if page.keywords %}
     <meta name="keywords" content="{{ page.keywords }}" />{% endif %}{% if page.description %}
     <meta name="description" content="{{ page.description }}" />{% endif %}
     <meta name="author" content="{{ site.author.name }}">
@@ -45,13 +46,6 @@
 			<ul class="nav">
 			    {% assign pages_list = site.pages %}{% assign group = 'navigation' %}{% include JB/pages_list %}
 			</ul>
-			<ul>
-				<li>
-					<form class="form-inline visible-lg visible-md" role="form" onsubmit="tmtxt_search_google()">
-						<input type="text" class="form-control input-sm" placeholder="Google Search" id="my-google-search">
-					</form>
-				</li>
-			</ul>
 			<ul class="nav pull-right" data-subscription="rss">
 				<li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
 			</ul>
@@ -62,7 +56,6 @@
 
     <div class="container">     
         <div class="content">
-			<p>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</p>
             {{ content }}
 
         <div id="comments" class="ds-thread" data-title="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}"></div>
@@ -75,13 +68,7 @@
                     ds.charset = 'UTF-8';
                     (document.getElementsByTagName('head')[0] 
                     || document.getElementsByTagName('body')[0]).appendChild(ds);
-                })();
-				
-				function tmtxt_search_google()
-				{
-				  var query = document.getElementById("my-google-search").value;
-				  window.open("http://google.com/search?q=" + query + "%20site:moxiaomomo.github.com.io/blue_sky");
-				}
+                })();				
             </script>
       </div>
 
