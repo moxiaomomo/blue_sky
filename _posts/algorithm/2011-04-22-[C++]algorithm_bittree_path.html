@@ -1,0 +1,57 @@
+---
+layout: default
+title: 【C++】求一棵二叉树的和为某一值的所有路径
+keywords: C++, algorithm
+category: algorithm
+---
+
+<p>可采用经典的深度优先算法实现。
+ 
+C++代码实现：</p>
+<!-- more -->
+<pre><code>
+template<class T>
+void findAllPaths(BTNode<T>* p,int epNum,int& curSum,vector<int> &path)
+{
+	curSum+=p->data;
+	path.push_back(p->data);
+
+	bool isLeaf=(!p->Lchild)&&(!p->Rchild);
+
+	if(isLeaf&&curSum==epNum)    //当前节点为叶节点且和为期望值 则输出
+	{
+		vector<int>::iterator iter =path.begin();
+		for(;iter!=path.end();++iter)
+		{
+			cout<<(*iter)<<" ";
+		}
+		cout<<endl;
+	}
+
+	if(p->Lchild)       //递归遍历左子树
+	{findAllPaths(p->Lchild,epNum,curSum,path);}
+	
+	if(p->Rchild)      //递归遍历右子树
+	{findAllPaths(p->Rchild,epNum,curSum,path);}
+
+	curSum-=p->data;    
+	path.pop_back(); //值还原 并返回
+}
+</code></pre>
+<p>附加（节点中使用的结构体）：</P>
+<code><pre>
+template<class T>
+struct BTNode
+{
+    T data;
+    BTNode <T> * Lchild,*Rchild;
+    BTNode(T nodeValue = T(),
+           BTNode<T>* leftNode = NULL,
+           BTNode<T>* rightNode = NULL )
+                :data(nodeValue),Lchild(leftNode),Rchild(rightNode){}       //可选择参数的默认构造函数
+};
+</code></pre>
+<p></P>
+<p>{{>page.date | date_to_string }}</p>
+
+
