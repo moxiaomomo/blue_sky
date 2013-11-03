@@ -1,0 +1,54 @@
+---
+layout: default
+title: 【C++】关于类的this指针总结
+category: C++
+---
+<p>this指针其实就是在实例化一个对象后产生的指针，并且是指向对象本身。
+也就是说，即使没有写上this指针，编译器在编译的时候也会加上this指针。
+它作为非静态成员函数的隐含形参，对各成员的访问可以通过this来实现。
+ 
+它的特点可以概括为：
+ 
+（1）this只能在成员函数中使用。而在全局函数或者静态函数中不能使用this指针，因为它们并不属于某一个对象。
+        如果实例化一个对象，对象名为p，则this=&p;
+ 
+（2）this的生命周期：在成员函数的开始前构造，在成员的销毁后清除。也就是它的生命周期和任何一个函数的参数一样。
+ 
+（3）this指针在类函数中的传递方式，通过例子说明：</p>
+<!-- more -->
+<pre><code class="C++">
+       #include<iostream>
+       using namespace std;
+　　 class P
+　　 {
+　　      int x, y;
+　　  public:
+　　      P(int a, int b) :x(a),y(b){} 　　
+            void ChangePoint( int a, int b){ x+=a; y+=b;}
+　　 };
+        int main()
+        {
+              P p1;
+              p1.ChangePoint(3,4);
+              return 0;
+         }
+</code></pre>
+<p>  那么函数ChangePoint的原型应该是ChangePoint(P *this,int a,int y),只不过this是隐式声明的。
+         这样，类实例p1的地址便传给了函数ChangePoint，而该函数中的操作也可以变为：
+         void ChangePoint( int a, int b)
+         { this->x+=a; this->y+=b;}
+         由此我们也知道了：p1调用该函数后，也就是p1的数据成员被调用并且值被更新，实际上
+         该函数起的作用相当于：p1.x+=a;p1.y+=b;
+        
+（4）this指针存放的位置并不固定，有可能在堆，栈，或者全局变量区中。所以我们无法知道一个对象的this指针的位置。
+ 
+借用一下一个经典的关于this指针的比喻说法：
+ 
+      当你进入一个房子后，
+　　你可以看见桌子、椅子、地板等，
+　　但是房子你是看不到全貌了。
+　　对于一个类的实例来说，
+　　你可以看到它的成员函数、成员变量，
+　　但是实例本身呢？
+　　this是一个指针，它时时刻刻指向你这个实例本身。
+</p>
