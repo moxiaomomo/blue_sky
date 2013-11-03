@@ -1,0 +1,48 @@
+---
+layout: default
+title: 【C++】打靶（递归）问题
+keywords: C++, algorithm
+category: algorithm
+---
+
+<p>古老的一道题：
+射击运动员10枪打90环的打发有多少种？用一段程序实现，将每种打发打印出来。（每法成绩均为整数，且在0到10环之间，可为0环也可为10环）。
+ 
+思路：使用递归思想
+首先考虑到一共要打十枪。则可以分三种情况来考虑：
+1.如果当前超过了十枪或者积分超过了给定值，则返回
+2.如果当前为第十枪，判断最后一枪的积分是否有可能达到给定值（0~10）
+  如果可以，可能值加1，然后返回；否则直接返回。
+3.其他情况下，继续递归
+源码：</p>
+<!-- more -->
+<pre><code>
+#include<iostream>
+using namespace std;
+
+int sum=0;
+int SCORE=90;
+
+void compute(int num,int scores)
+{
+	if(num<=0||scores>SCORE)return;
+
+	if(num==1)
+	{
+		if(scores+10>=SCORE)sum++;
+		return;
+	}
+	for(int i=0;i<=10;++i)
+	{compute(num-1,scores+i);}
+}
+
+int main()
+{
+    compute(10,0);
+    cout<<sum<<endl;
+    return 0;
+}
+</code></pre>
+<p>{{>page.date | date_to_string }}</p>
+
+
