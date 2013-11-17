@@ -1,0 +1,56 @@
+---
+layout: default
+title: 【C++】背包类型题
+category: algorithm
+---
+
+<p>题目：
+输入两个整数n 和m，从数列1，2，3.......n 中随意取几个数,
+使其和等于m ,要求将其中所有的可能组合列出来.
+ 
+思路：在每一次递归中，考虑是与否将当前元素添加到数列中去，知道和达到某一值为止。
+代码实现：</p>
+<!-- more -->
+<pre><code>
+#include<iostream>
+#include<deque>
+using namespace std;
+
+ void findNums(int n,int leftSum,deque<int>& deq)
+ {
+	   if(n<0||leftSum<0)return;	  //已经遍历完数列，返回
+	   if(leftSum>0)
+	   {
+		   deq.push_front(n);			   //将n加入数列或者不加入
+		   findNums(n-1,leftSum-n,deq);
+		   deq.pop_front();
+		   findNums(n-1,leftSum,deq);
+	   }
+	   else {                      //当前数列综合已经达到要求，则输出
+		   deque<int>::iterator i=deq.begin();
+		   for(;i!=deq.end();++i)
+		   {
+			   cout<<*i<<" ";
+		   }
+		   cout<<endl;
+	   }
+ }
+
+int main()
+{
+	deque<int> myDeq;
+	findNums(10,35,myDeq);
+	return 0;
+}
+
+</code></pre>
+<p>同类题目：
+题目：输入一个已经按升序排序过的数组和一个数字，
+在数组中查找两个数，使得它们的和正好是输入的那个数字。
+要求时间复杂度是O(n)。如果有多对数字的和等于输入的数字，输出任意一对即可。
+例如输入数组1、2、4、7、11、15 和数字15。由于4+11=15，因此输出4 和11。
+ 
+思路：对于这道题只要增加一个数组的记录就行了，其他一样。 </P>
+<p>{{>page.date | date_to_string }}</p>
+
+
