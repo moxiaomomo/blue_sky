@@ -1,0 +1,66 @@
+---
+layout: default
+title: 【C++】栈的push，pop序列
+category: algorithm
+---
+
+<p>题目：输入两个整数序列。其中一个序列表示栈的push 顺序，
+判断另一个序列有没有可能是对应的pop 顺序。
+ 
+思路：首先新建一个栈。从push序列开始遍历，如果当前元素与pop序列当前元素相等，则两个序列向前推进。
+        否则如果当前栈的栈顶元素与与pop序列当前元素相等，则pop序列向前推进，栈顶元素出栈。
+        否则如果当前push序列还没遍历完，则将push序列当前元素压入栈，然后继续迭代。
+        否则返回push与pop序列不对应的信息。
+        在找到所有匹配之后，返回true。
+源码：</p>
+<!-- more -->
+<pre><code>
+#include<iostream>
+#include<stack>
+using namespace std;
+
+bool isPopSequence(const int pushArry[],const int popArry[],int _size)
+{
+	const  int* pPush=pushArry;
+	const int* pPop=popArry;
+	stack<int> stData;
+	int cnt=0;
+	while(pPop-popArry<_size)	  //判断是否已经遍历完
+	{
+		if(pPush-pushArry>=_size&&stData.empty())break;
+
+		if(pPush-pushArry<_size&&*pPush==*pPop){		 //	pushArry当前元素与popArry当前元素相等
+			pPush++;
+			pPop++;
+		}
+		else if(!stData.empty()&&stData.top()==*pPop){	//栈顶元素与popArry当前元素相等
+			stData.pop();
+			pPop++;
+		}
+		else if(pPush-pushArry<_size){			 //如果pushArry还没遍历完
+			stData.push(*pPush);
+			pPush++;
+		}
+		else return false;		//找不到匹配值
+	}
+	return true;
+}
+
+
+int main()
+{
+
+	int a[5]={1,2,3,4,5};
+	int b[5]={2,5,4,3,1};
+	cout<<isPopSequence(a,b,5)<<endl;
+
+	return 0;
+}
+
+</code></pre>
+<p>另外，在写这个程序之后，学到一点新的东西：
+如果函数传参中的参数是整形数组的话，还应当将该数组的长度一参数形式传进来，
+便于在函数中使用到获取数组长度或者判断越界方面的操作。</P>
+<p>{{>page.date | date_to_string }}</p>
+
+
