@@ -1,0 +1,125 @@
+---
+layout: default
+title: 【C++】字符串的部分库函数的实现
+category: C++
+---
+<p>受July（http://hi.csdn.net/v_JULY_v）影响，学C++的，应该懂得一些库函数的实现原理，
+于是将几个类似于strcmp的函数实现了一下。
+可能还有一些潜在的bug，会继续完善和添加其他函数的实现。</p>
+<!-- more -->
+<pre><code class="C++">
+ //查找字符串中的子串
+int mystrstr1(const char* string,const char* substring)
+{
+	if(string==NULL||substring==NULL)return -1;
+
+	int s1=strlen(string);
+	int s2=strlen(substring);
+
+	if(s1<s2)return-1;
+
+	const char* temp=substring;
+
+	while(*string!='\0')      //字符串未扫描完毕
+	{
+		if(*string==*substring)	  //当前字符匹配
+		{
+			while(*substring!='\0')		 //判断是否与整个目标字符串匹配
+			{
+				if(*(string++)!=*(substring++))		 //若匹配过程不成功，则进行下一阶段扫描
+				{
+					substring=temp;
+					--string;
+					break;
+				}
+				
+				if(*substring=='\0')return 1;     //匹配成功
+			}
+		}
+		else
+		{
+			++string;
+		}
+	}
+
+	return -1;
+}
+
+//复制字符串函数
+char* mystrcpy(char* DestStr,const char* SrcStr)    //源字符串标明为const
+{
+	if(DestStr==SrcStr)return DestStr;			  //自我复制
+	assert((DestStr!=NULL)&&(SrcStr!=NULL));	 
+
+	char* tempStr=DestStr;
+
+	while((*(DestStr++)=*(SrcStr++))!='\0');	//复制过程，遇到'\0'结束
+
+	return tempStr;							 //返回目标地址，方便链式操作
+}
+
+//在一个字符串中找到第一个只出现一次的字符。如输入dsfsdfghyjkoooi,结果将输出g。
+char findDestChar(const char* str)
+{
+	int hashTable[256]={0};	   //一个字符一个byte，则字符个数不超过256个
+
+	const char* temp=str;
+	while(*str!='\0')
+	{
+		hashTable[*str]++;
+		str++;
+	}
+	while(*temp!='\0')
+	{
+		if(hashTable[*temp]==1)return *temp;
+		temp++;
+	}
+
+	return '\0';
+}
+
+//比较两个字符串
+int mystrcmp(const char* str1,const char* str2)
+{
+	assert(str1!=NULL&&str2!=NULL);
+
+	while(*str1&&*str2&&*str1==*str2)
+	{
+		++str1;
+		++str2;
+	}
+	if(!(*str1)||!(*str2))return 0;
+	return (*str1-*str2);
+}
+
+//连接字符串
+char* mystrcat(char* destStr,const char* srcStr)	 //如果两个字符串是同一个字符串呢？
+{
+	assert(destStr!=NULL&&srcStr!=NULL);
+
+	char* temp=destStr;
+
+	while(*destStr!='\0'){++destStr;   }
+
+	while((*destStr++ = *srcStr++)!='\0');
+
+	return temp;
+} 
+
+//获取字符串长度
+int mystrlen(const char* str)
+{
+	assert(str!=NULL);
+
+	int count=0;
+	while(*str++!='\0')
+	{
+		count++;
+	}
+	return count;
+}
+</p>
+<p>学得越久，就发现自己越多的不懂。所谓学术无止境，唯有永不止步。
+ 
+同步的文章：http://moxiaomomo.iteye.com/blog/1052815</p>
+<p>{{>page.date | date_to_string }}</p>
