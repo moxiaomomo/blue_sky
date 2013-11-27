@@ -1,0 +1,26 @@
+---
+layout: default
+title: 【Qt开发】Qt GUI编程中设置输入等待
+category: C++, Qt
+---
+<p>比如有一个关于问答游戏的程序，程序只有在输入当前问题的答案才会继续提问下一个问题，
+而输入答案是由玩家来操纵的，程序要时刻监测输入情况。 
+
+这种问题在控制台很容易解决，在Qt GUI应用程序则要用到线程来解决，</p>
+<!-- more -->
+<pre><code class="C++">
+#include <windows.h>
+
+//......代码省略
+while(!isSend)//isSend是输入答案的确认变量 
+{
+     QCoreApplication::processEvents(); //支持界面刷新
+     Sleep(300);//当前线程睡眠一段时间(0.3s)，避免一直占用CPU
+}//如果确认输入答案，即isSend为true,则跳出循环
+isSend=false;
+//根据当前问题产生相应的动作
+//...若要继续提问题，则可继续循环
+
+</p>
+<p></p>
+<p>{{>page.date | date_to_string }}</p>
