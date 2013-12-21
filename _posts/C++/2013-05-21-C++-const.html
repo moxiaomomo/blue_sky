@@ -1,0 +1,37 @@
+---
+layout: default
+title: 【C++】const的几个用法
+category: C++
+---
+<p>（1）const定义常量:
+       const dataType constData=value;//const修饰的类型为dataType的变量value不可变.
+（2）指针中使用const，主要有三种方式
+     a.指针本身是常量,它本身不可变   
+      char* const ptr; 
+
+     b.指针所指向的内容是常量，指向的内容不可变
+      const char* ptr;
+
+     c.两者都不可变
+      const char* const ptr; 
+<!-- more -->
+（3）函数中使用const
+     a.传指针参数前添加const
+      void* A(const char* Str);  //Str指向的内容被修饰为常量
+     b.传引用参数前添加const
+      void* A(const ClassType &obj);  //obj在函数体内被修饰为常量
+（4）类中使用const
+     a.使用const修饰成员变量
+       使用const修饰类的成员函数，表示成员常量，它只能在初始化列表中赋值。如：
+     class A
+     { 
+          A(int x): val(x) { } ; //在初始化列表中定义
+          const int val;         //成员常量
+     } 
+      b.使用const修饰类的成员函数，如 int getNum(int a)const;
+        这样当程序修改了类的数据成员或调用了非const成员函数时，编译器就会报错。
+      c.使用const修饰类的对象，或者类对象引用或指针
+        这对象中的所有数据成员都不能被修改，对于对象指针或对象引用也一样。
+ 
+        在这种情况下，同时不能通过对象名调用对象中的非const成员，这符合安全规则。</p>
+<p>{{>page.date | date_to_string }}</p>

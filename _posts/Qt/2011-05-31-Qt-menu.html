@@ -1,0 +1,41 @@
+---
+layout: default
+title: 【Qt开发】Qt GUI编程中设置输入等待
+category: C++, Qt
+---
+<p>要在某一种窗体内添加右键菜单栏，比如在QTreeWidget中添加，
+可以用到slot函数customContextMenuRequested(QPointpos)。
+ 
+如果是在Qt Creator中，则操作过程为:右击QTreeWidget-->go to slot--
+-->选择customContextMenuRequested(QPointpos)。
+然后，在新建的customContextMenuRequested(QPointpos)函数中便可以实现具体的菜单栏了。
+为了判断右键点击的位置，即点即不同的item节点，会出现不同的右键菜单，我们可以用API中itemAt()函数实现。
+而为了给每个节点赋予不同的键值，可以通过setData()来实现。
+我在TreeWidget中添加右键菜单的实现代码：</p>
+<!-- more -->
+<pre><code class="C++">
+void MainWindow::on_treeWidget_customContextMenuRequested(QPoint pos)
+{
+    QTreeWidgetItem* curItem=ui->treeWidget->itemAt(pos);  //获取当前被点击的节点
+    if(curItem==NULL)return;           //这种情况是右键的位置不在treeItem的范围内，即在空白位置右击
+    if(0==curItem->data(0,Qt::UserRole))      //data(...)返回的data已经在之前建立节点时用setdata()设置好
+    {
+       QMenu *popMenu =new QMenu(this);//定义一个右键弹出菜单
+
+       popMenu->addAction(ui->action_newDB);//往菜单内添加QAction   该action在前面用设计器定义了
+       popMenu->addAction(ui->action_openDB);
+       popMenu->addAction(ui->action_delDB);
+       popMenu->exec(QCursor::pos());//弹出右键菜单，菜单位置为光标位置
+    }
+    else
+    {
+        QMenu *popMenu =new QMenu(this);//定义一个右键弹出菜单
+
+        popMenu->addAction(ui->action_newTable);//往菜单内添加QAction   该action在前面用设计器定义了
+        popMenu->addAction(ui->action_openTable);
+        popMenu->addAction(ui->action_designTable);
+        popMenu->exec(QCursor::pos());//弹出右键菜单，菜单位置为光标位置
+    }
+}
+</code></pre>
+<p>{{>page.date | date_to_string }}</p>
