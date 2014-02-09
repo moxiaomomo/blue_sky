@@ -1,0 +1,371 @@
+---
+layout: default
+title: 【python】pygame模仿打飞机
+category: pygame
+---
+<p>gameCommon.py定义了游戏一些基本类型数据, gameRole.py定义了游戏角色相关数据, main.py为游戏主逻辑部分</p>
+<p>gameCommon.py</p>
+<pre><code class="python">
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 11 11:05:00 2013
+@author: Leo
+@modifier: xiaomo
+"""
+
+import pygame
+from sys import exit
+from pygame.locals import *
+from gameRole import *
+import random
+
+# 初始化游戏
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('模仿打飞机')
+
+<!-- more -->
+
+# 载入游戏音乐
+bullet_sound = pygame.mixer.Sound('resources/sound/bullet.wav')
+enemy1_down_sound = pygame.mixer.Sound('resources/sound/enemy1_down.wav')
+game_over_sound = pygame.mixer.Sound('resources/sound/game_over.wav')
+bullet_sound.set_volume(0.3)
+enemy1_down_sound.set_volume(0.3)
+game_over_sound.set_volume(0.3)
+pygame.mixer.music.load('resources/sound/game_music.wav')
+pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.set_volume(0.25)
+
+# 载入背景图
+IMG_BACKGROUND = pygame.image.load('resources/image/background.jpg').convert()
+img_game_over = pygame.image.load('resources/image/gameover.png')
+
+filename = 'resources/image/shoot.png'
+plane_img = pygame.image.load(filename)
+
+# 设置玩家相关参数
+player_rect = []
+# 玩家角色区域
+player_rect.append(pygame.Rect(0, 99, 100, 120))   
+# 玩家角色爆炸图片区域    
+player_rect.append(pygame.Rect(165, 360, 100, 120))
+player_rect.append(pygame.Rect(165, 234, 100, 120))     
+player_rect.append(pygame.Rect(330, 624, 100, 120))
+player_rect.append(pygame.Rect(330, 498, 100, 120))
+player_rect.append(pygame.Rect(432, 624, 100, 120))
+player_pos = [200, 500]
+player = Player(plane_img, player_rect, player_pos)
+
+# 定义子弹对象使用的surface相关参数
+bullet_rect = pygame.Rect(1004, 987, 9, 21)
+bullet_img = plane_img.subsurface(bullet_rect)
+
+# 定义敌机对象使用的surface相关参数
+enemy1_rect = pygame.Rect(534, 612, 57, 43)
+enemy1_img = plane_img.subsurface(enemy1_rect)
+enemy1_down_imgs = []
+enemy1_down_imgs.append(plane_img.subsurface(pygame.Rect(267, 347, 57, 43)))
+enemy1_down_imgs.append(plane_img.subsurface(pygame.Rect(873, 697, 57, 43)))
+enemy1_down_imgs.append(plane_img.subsurface(pygame.Rect(267, 296, 57, 43)))
+enemy1_down_imgs.append(plane_img.subsurface(pygame.Rect(930, 697, 57, 43)))
+
+enemies1 = pygame.sprite.Group()
+
+# 存储被击毁的飞机，用来渲染击毁精灵动画
+enemies_down = pygame.sprite.Group()
+
+
+</code></pre>
+
+<p>gameRole.py</p>
+<pre><code>
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 11 11:05:00 2013
+@author: Leo
+@modifier: xiaomo
+"""
+
+import pygame
+import math
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 580
+
+TYPE_SMALL = 1
+TYPE_MIDDLE = 2
+TYPE_BIG = 3
+
+# 子弹对象类
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, bullet_img, init_pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = bullet_img
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = init_pos
+        self.speed = 10
+
+    def move(self):
+        self.rect.top -= self.speed
+
+class AutoBullet(Bullet):
+    def __init__(self, bullet_img, init_pos, left=True):
+        #Bullet.__init__(self, bullet_img, init_pos)
+        pygame.sprite.Sprite.__init__(self)
+        self.image = bullet_img
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = init_pos
+        self.speed = 8
+        self.left=left
+
+    def move(self):
+        x_speed = 0
+        if self.left:
+            x_speed = -1*self.speed
+        else:
+            x_speed = self.speed
+        x = (self.rect.midbottom[0] + x_speed * math.cos(60.0))
+        y = int((self.rect.midbottom[1] - self.speed * math.cos(30.0))*0.95)
+        self.rect.midbottom = [x,y]
+
+# 玩家对象类
+class Player(pygame.sprite.Sprite):
+    def __init__(self, plane_img, player_rect, init_pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = []                                 # 用来存储玩家对象精灵图片的列表
+        for i in range(len(player_rect)):
+            self.image.append(pygame.transform.scale(plane_img.subsurface(player_rect[i]), (60, 75)).convert_alpha())
+        self.rect = pygame.Rect(0,0,60,75)              # 初始化图片所在的矩形
+        self.rect.topleft = init_pos                    # 初始化矩形的左上角坐标
+        self.speed = 8                                  # 初始化玩家速度，这里是一个确定的值
+        self.bullets = pygame.sprite.Group()            # 玩家飞机所发射的子弹的集合
+        self.img_index = 0                              # 玩家精灵图片索引
+        self.is_hit = False                             # 玩家是否被击中
+
+    def shoot(self, bullet_img):
+        bullet1 = Bullet(bullet_img, self.rect.topleft)
+        self.bullets.add(bullet1)
+        bullet2 = Bullet(bullet_img, self.rect.topright)
+        self.bullets.add(bullet2)
+        bullet3 = AutoBullet(bullet_img, self.rect.topleft, left=False)
+        self.bullets.add(bullet3)
+        bullet4 = AutoBullet(bullet_img, self.rect.topright)
+        self.bullets.add(bullet4)
+
+    def moveUp(self):
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        else:
+            self.rect.top -= self.speed
+
+    def moveDown(self):
+        if self.rect.top >= SCREEN_HEIGHT - self.rect.height:
+            self.rect.top = SCREEN_HEIGHT - self.rect.height
+        else:
+            self.rect.top += self.speed
+
+    def moveLeft(self):
+        if self.rect.left <= 0:
+            self.rect.left = 0
+        else:
+            self.rect.left -= self.speed
+
+    def moveRight(self):
+        if self.rect.left >= SCREEN_WIDTH - self.rect.width:
+            self.rect.left = SCREEN_WIDTH - self.rect.width
+        else:
+            self.rect.left += self.speed
+
+# 敌人对象类
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, enemy_img, enemy_down_imgs, init_pos):
+       pygame.sprite.Sprite.__init__(self)
+       self.image = enemy_img
+       self.rect = self.image.get_rect()
+       self.rect.topleft = init_pos
+       self.down_imgs = enemy_down_imgs
+       self.speed = 2
+       self.down_index = 0
+
+    def move(self):
+        self.rect.top += self.speed
+
+</code></pre>
+
+<h>main.py</h>
+<pre><code>
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 11 11:05:00 2013
+@author: Leo
+@modifier: xiaomo
+"""
+
+import pygame
+from sys import exit
+from pygame.locals import *
+import random
+
+from gameCommon import *
+from gameRole import *
+
+def move_plane(player):
+	# 监听键盘事件
+	key_pressed = pygame.key.get_pressed()
+	# 若玩家被击中，则演示爆炸效果
+	if not player.is_hit:
+		if key_pressed[K_w] or key_pressed[K_UP]:
+			player.moveUp()
+		if key_pressed[K_s] or key_pressed[K_DOWN]:
+			player.moveDown()
+		if key_pressed[K_a] or key_pressed[K_LEFT]:
+			player.moveLeft()
+		if key_pressed[K_d] or key_pressed[K_RIGHT]:
+			player.moveRight()
+
+def update_score(score):
+	score_font = pygame.font.Font(None, 36)
+	score_text = score_font.render(str(score), True, (128, 128, 128))
+	text_rect = score_text.get_rect()
+	text_rect.topleft = [10, 10]
+	screen.blit(score_text, text_rect) 
+
+def show_game_over(score):
+	font = pygame.font.Font(None, 48)
+	text = font.render('Score: '+ str(score), True, (255, 0, 0))
+	text_rect = text.get_rect()
+	text_rect.centerx = screen.get_rect().centerx
+	text_rect.centery = screen.get_rect().centery + 24
+	screen.blit(img_game_over, (0, 0))
+	screen.blit(text, text_rect)
+
+def wait_for_exit():
+	try:
+		pygame.display.update() 
+		game_exit = False
+		while not game_exit:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					game_exit = True
+	finally:
+		pygame.quit()        
+
+def start_game():
+	shoot_frequency = 0
+	enemy_frequency = 0
+	player_down_index = 16
+	score = 0
+	clock = pygame.time.Clock()
+	running = True
+	y_offset = 0
+
+	while running:
+		# 控制游戏最大帧率为60
+		clock.tick(60)
+
+		# 控制发射子弹频率,并发射子弹
+		if not player.is_hit:
+			if shoot_frequency % 10 == 0:
+				bullet_sound.play()
+				player.shoot(bullet_img)
+			shoot_frequency += 1
+			if shoot_frequency >= 10:
+				shoot_frequency = 0
+			y_offset += 5
+			if y_offset>=SCREEN_HEIGHT:
+					y_offset = 0
+
+		# 创建敌机
+		if enemy_frequency % 50 == 0:
+			enemy1_pos = [random.randint(0, SCREEN_WIDTH - enemy1_rect.width), 0]
+			enemy1 = Enemy(enemy1_img, enemy1_down_imgs, enemy1_pos)
+			enemies1.add(enemy1)
+		enemy_frequency += 1
+		if enemy_frequency >= 100:
+			enemy_frequency = 0
+
+		# 移动子弹，若超出窗口范围则删除
+		for bullet in player.bullets:
+			bullet.move()
+			if bullet.rect.bottom < 0:
+				player.bullets.remove(bullet)
+
+		# 移动敌机，若超出窗口范围则删除
+		for enemy in enemies1:
+			enemy.move()
+			# 判断玩家是否被击中
+			if pygame.sprite.collide_circle(enemy, player):
+				enemies_down.add(enemy)
+				enemies1.remove(enemy)
+				player.is_hit = True
+				game_over_sound.play()
+				break
+			if enemy.rect.top < 0:
+				enemies1.remove(enemy)
+
+		# 将被击中的敌机对象添加到击毁敌机Group中，用来渲染击毁动画
+		enemies1_down = pygame.sprite.groupcollide(enemies1, player.bullets, 1, 1)
+		for enemy_down in enemies1_down:
+			enemies_down.add(enemy_down)
+
+		# 绘制背景
+		screen.fill(0)
+		screen.blit(IMG_BACKGROUND, (0, y_offset-SCREEN_HEIGHT))
+		screen.blit(IMG_BACKGROUND, (0, y_offset))
+
+		# 绘制玩家飞机
+		if not player.is_hit:
+			screen.blit(player.image[player.img_index], player.rect)
+			# 更换图片索引使飞机有动画效果
+			player.img_index = shoot_frequency / 8
+		else:
+			player.img_index = player_down_index / 8
+			screen.blit(player.image[player.img_index], player.rect)
+			player_down_index += 1
+			if player_down_index > 47:
+				running = False
+
+		# 绘制击毁动画
+		for enemy_down in enemies_down:
+			if enemy_down.down_index == 0:
+				enemy1_down_sound.play()
+			if enemy_down.down_index > 7:
+				enemies_down.remove(enemy_down)
+				score += 1000
+				continue
+			screen.blit(enemy_down.down_imgs[enemy_down.down_index / 2], enemy_down.rect)
+			enemy_down.down_index += 1
+
+		# 绘制子弹和敌机
+		player.bullets.draw(screen)
+		enemies1.draw(screen)
+		# 绘制得分
+		update_score(score)
+		# 更新屏幕
+		pygame.display.update() 
+
+		# 监听事件并移动飞机		
+		move_plane(player)
+		
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()		
+
+	# 显示游戏结束
+	show_game_over(score)
+	# 等待退出
+	wait_for_exit()
+		
+if __name__=='__main__':
+	start_game()
+
+</code></pre>
+
+<h>运行效果如下:</h>
+<img src="/blue_sky/assets/img/20140209192140.png" alt="模仿打飞机"></img>
+<p></p>
+
+
